@@ -54,7 +54,6 @@ section MartingaleL2
 -- Lean needs the ambient `[MeasurableSpace Ω]` to form `Measure Ω`.
 -- The lemma below only uses it through those measures, so we silence
 -- `linter.unusedSectionVars` to avoid a spurious warning.
-set_option linter.unusedSectionVars false
 
 /-- L² identification lemma: if `X₂` is square-integrable and
 `μ[X₂ | m₁] = X₁`, while the second moments of `X₁` and `X₂` coincide,
@@ -270,7 +269,6 @@ lemma condexp_same_dist {μ : Measure Ω}
   simpa [h_comp_eta, h_comp_zeta] using h_result
 /-! ### Utilities for the Martingale Approach -/
 
-set_option linter.unusedSectionVars false in
 /-- Given conditional probabilities agreeing, establish conditional independence.
 This is immediate from Doob's characterization above.
 -/

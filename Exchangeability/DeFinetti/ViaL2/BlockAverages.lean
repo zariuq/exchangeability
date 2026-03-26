@@ -446,7 +446,6 @@ private lemma reindexed_weights_prob
     rw [h_w_def]
     exact h_nonneg _
 
-@[nolint unusedArguments]
 lemma l2_bound_two_windows_uniform
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (X : ℕ → Ω → ℝ) (_hX_contract : Contractable μ X)
@@ -896,12 +895,11 @@ Returns `Cf = 2σ²(1-ρ)` where `(mf, σ², ρ)` is the covariance structure of
 **Design rationale**: Computing the covariance structure once and passing it to
 both bound lemmas ensures they use the same constant, avoiding the need to prove
 equality of opaque existential witnesses. -/
-@[nolint unusedArguments]
 lemma get_covariance_constant
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (X : ℕ → Ω → ℝ) (hX_contract : Contractable μ X)
     (hX_meas : ∀ i, Measurable (X i))
-    (hX_L2 : ∀ i, MemLp (X i) 2 μ)
+    (_hX_L2 : ∀ i, MemLp (X i) 2 μ)
     (f : ℝ → ℝ) (hf_meas : Measurable f)
     (hf_bdd : ∃ M, ∀ x, |f x| ≤ M) :
     ∃ (Cf : ℝ) (mf σSqf ρf : ℝ),
@@ -915,7 +913,7 @@ lemma get_covariance_constant
       -1 ≤ ρf ∧ ρf ≤ 1 := by
   -- Step 1: Show f∘X is contractable
   have hfX_contract : Contractable μ (fun n ω => f (X n ω)) :=
-    @contractable_comp Ω _ μ _ X hX_contract hX_meas f hf_meas
+    contractable_comp (X := X) hX_contract hX_meas f hf_meas
 
   -- Step 2: Get covariance structure (m, σ², ρ) of f∘X
   obtain ⟨M, hM⟩ := hf_bdd
@@ -953,7 +951,6 @@ indices n and m is uniformly small. This gives us the key uniform bound we need.
 NOTE: This wrapper is not used in the main proof. The uniform version with disjointness
 hypothesis is used instead. This wrapper is left for potential future use.
 -/
-@[nolint unusedArguments]
 lemma l2_bound_two_windows
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (X : ℕ → Ω → ℝ) (hX_contract : Contractable μ X)
@@ -1010,7 +1007,6 @@ with the average of the last k terms (where k ≤ m) has the same L² contractab
 
 This is the key lemma needed to complete the Cauchy argument in weighted_sums_converge_L1.
 -/
-@[nolint unusedArguments]
 lemma l2_bound_long_vs_tail
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (X : ℕ → Ω → ℝ) (_hX_contract : Contractable μ X)
@@ -1417,7 +1413,7 @@ lemma l2_bound_long_vs_tail
               · congr 1
                 ext j
                 simp only
-                ring
+                ring_nf
               -- Prove injectivity
               · intro j₁ _ j₂ _ h
                 simp only [Fin.mk.injEq] at h
@@ -1450,12 +1446,10 @@ def tailFamily := @Exchangeability.Tail.tailFamily
 def tailSigma := @Exchangeability.Tail.tailProcess
 
 -- Re-export the lemmas for backward compatibility
-@[nolint unusedArguments]
 lemma antitone_tailFamily {Ω β : Type*} [MeasurableSpace Ω] [MeasurableSpace β]
     (X : ℕ → Ω → β) : Antitone (tailFamily X) :=
   Exchangeability.Tail.tailFamily_antitone X
 
-@[nolint unusedArguments]
 lemma tailSigma_le_tailFamily {Ω β : Type*} [MeasurableSpace Ω] [MeasurableSpace β]
     (X : ℕ → Ω → β) (n : ℕ) : tailSigma X ≤ tailFamily X n :=
   Exchangeability.Tail.tailProcess_le_tailFamily X n
@@ -1530,4 +1524,3 @@ theorem subseq_ae_of_L1
 `MoreL2Helpers.lean` (at the `ViaL2` namespace level, not `Helpers`).
 A stub was previously here but has been removed since it wasn't used
 in the critical path. -/
-

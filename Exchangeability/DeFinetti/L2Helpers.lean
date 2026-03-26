@@ -43,7 +43,7 @@ open scoped BigOperators
 
 section CovarianceHelpers
 
-variable {μ : Measure Ω} [IsProbabilityMeasure μ]
+variable {μ : Measure Ω}
 variable (X : ℕ → Ω → ℝ)
 variable (hX_contract : Contractable μ X)
 variable (hX_meas : ∀ i, Measurable (X i))
@@ -51,7 +51,6 @@ variable (hX_meas : ∀ i, Measurable (X i))
 /-
 Note: Some lemmas in this section explicitly include type and measurability parameters that shadow
 section variables. This makes certain section variables unused for those lemmas, requiring
-`set_option linter.unusedSectionVars false` before each affected declaration.
 -/
 
 /-- The unique element of Fin 1. -/
@@ -71,14 +70,12 @@ private lemma measurable_eval_fin2 {i : Fin 2} :
     Measurable fun g : (Fin 2 → ℝ) => g i :=
   measurable_pi_apply _
 
-set_option linter.unusedSectionVars false in
 /-- **All marginals have the same distribution in a contractable sequence.**
 
 For a contractable sequence, the law of each coordinate agrees with the law of `X 0`.
 This follows from contractability by taking the singleton subsequence `{i}`.
 
 This is used to establish uniform covariance structure across all pairs of coordinates. -/
-@[nolint unusedArguments]
 lemma contractable_map_single (hX_contract : Contractable μ X) (hX_meas : ∀ i, Measurable (X i)) {i : ℕ} :
     Measure.map (fun ω => X i ω) μ = Measure.map (fun ω => X 0 ω) μ := by
   classical
@@ -130,7 +127,6 @@ private lemma strictMono_two {i j : ℕ} (hij : i < j) :
   subst ha; subst hb
   simp [fin2Zero, fin2One, hij]
 
-set_option linter.unusedSectionVars false in
 /-- **All bivariate marginals have the same distribution in a contractable sequence.**
 
 For a contractable sequence, every increasing pair `(i,j)` with `i < j` has the same
@@ -140,7 +136,6 @@ subsequence `{i, j}`.
 Combined with `contractable_map_single`, this establishes that covariances are uniform:
 Cov(X_i, X_j) depends only on whether i = j, giving the covariance structure needed
 for the L² contractability bound. -/
-@[nolint unusedArguments]
 lemma contractable_map_pair (hX_contract : Contractable μ X) (hX_meas : ∀ i, Measurable (X i))
     {i j : ℕ} (hij : i < j) :
     Measure.map (fun ω => (X i ω, X j ω)) μ =
@@ -181,13 +176,11 @@ lemma contractable_map_pair (hX_contract : Contractable μ X) (hX_meas : ∀ i, 
     simp [eval, fin2Zero, fin2One]
   simpa [Function.comp, h_comp_simp, h_comp_simp'] using h_comp
 
-set_option linter.unusedSectionVars false in
 /-- **Contractability is preserved under measurable postcomposition.**
 
 If X is a contractable sequence and f is measurable, then `f ∘ X` is also contractable.
 This allows transferring contractability from one sequence to another via measurable
 transformations, which is useful for studying bounded functions of contractable sequences. -/
-@[nolint unusedArguments]
 lemma contractable_comp (hX_contract : Contractable μ X) (hX_meas : ∀ i, Measurable (X i))
     (f : ℝ → ℝ) (hf_meas : Measurable f) :
     Contractable μ (fun n ω => f (X n ω)) := by
@@ -263,7 +256,6 @@ lemma dist_toLp_eq_eLpNorm_sub
 
 If `x < ofReal ε` in ENNReal (with x finite), then `toReal x < ε` in ℝ.
 Bridges extended and real arithmetic in L^p norm bounds. -/
-@[nolint unusedArguments]
 lemma toReal_lt_of_lt_ofReal {x : ENNReal} {ε : ℝ}
     (_hx : x ≠ ⊤) (hε : 0 ≤ ε) :
     x < ENNReal.ofReal ε → ENNReal.toReal x < ε := by
@@ -848,7 +840,6 @@ private lemma prob_dist_diff_abs_sum_le_two {n : ℕ}
     _ ≤ 2 * 1 := mul_le_mul_of_nonneg_left hle_one (by norm_num)
     _ = 2 := by norm_num
 
-@[nolint unusedArguments]
 theorem l2_contractability_bound
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     {n : ℕ} (ξ : Fin n → Ω → ℝ)

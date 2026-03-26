@@ -292,7 +292,7 @@ lemma directing_measure_measurable
         have h_univ_const : ∀ ω, directing_measure X hX_contract hX_meas hX_L2 ω Set.univ = 1 := by
           intro ω
           have hprob := directing_measure_isProbabilityMeasure X hX_contract hX_meas hX_L2 ω
-          simpa using hprob.measure_univ
+          exact hprob.measure_univ
         simp_rw [h_univ_const]
         -- (fun ω => 1 - ν(ω)(s)) is measurable
         -- Constant 1 minus measurable function
@@ -370,7 +370,6 @@ This is used to prove the linearity lemmas below.
 This follows from the triangle inequality: ‖g - h‖₁ ≤ ‖g - f_n‖₁ + ‖f_n - h‖₁,
 and both terms go to 0.
 -/
-@[nolint unusedArguments]
 lemma ae_eq_of_tendsto_L1 {μ : Measure Ω} [IsProbabilityMeasure μ]
     {f : ℕ → Ω → ℝ} {g h : Ω → ℝ}
     (_hf_meas : ∀ n, Measurable (f n))
@@ -776,7 +775,7 @@ lemma weighted_sums_converge_L1_add
               ((1 / (m : ℝ)) * ∑ k : Fin m, f (X (k.val + 1) ω) - alpha_f ω +
                (1 / (m : ℝ)) * ∑ k : Fin m, g (X (k.val + 1) ω) - alpha_g ω)
           convert h using 1
-          ring
+          ring_nf
         _ ≤ |-((1 / (m : ℝ)) * ∑ k : Fin m, (f + g) (X (k.val + 1) ω) - alpha_fg ω)| +
             (|(1 / (m : ℝ)) * ∑ k : Fin m, f (X (k.val + 1) ω) - alpha_f ω| +
             |(1 / (m : ℝ)) * ∑ k : Fin m, g (X (k.val + 1) ω) - alpha_g ω|) := by
@@ -834,7 +833,7 @@ lemma weighted_sums_converge_L1_add
         _ < ε + ε + ε := by
           have h1 := add_lt_add hM_fg hM_f
           have h2 := add_lt_add h1 hM_g
-          convert h2 using 1 <;> ring
+          simpa [add_assoc] using h2
         _ = 3 * ε := by ring
         _ < 4 * ε := by linarith
     -- But 4 * ε = ∫|...|, so we have ∫|...| < ∫|...|
@@ -1225,7 +1224,7 @@ lemma integral_alphaIic_eq_marginal
   let ind : ℝ → ℝ := (Set.Iic t).indicator (fun _ => (1 : ℝ))
   have ind_meas : Measurable ind := measurable_const.indicator measurableSet_Iic
   have ind_bdd : ∀ x, |ind x| ≤ 1 := by
-    intro x; by_cases hx : x ≤ t <;> simp [ind, Set.indicator, hx, abs_of_nonneg]
+    intro x; by_cases hx : x ≤ t <;> simp [ind, hx, abs_of_nonneg]
 
   -- Get the L¹ limit from weighted_sums_converge_L1
   let limit := (weighted_sums_converge_L1 X hX_contract hX_meas hX_L2
@@ -1304,7 +1303,7 @@ lemma integral_alphaIic_eq_marginal
     -- Use tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top with p = 1
     have h_A_int : ∀ m, Integrable (A m) μ := fun m => by
       refine ⟨(hA_meas m).aestronglyMeasurable, ?_⟩
-      apply hasFiniteIntegral_of_bounded (C := 1)
+      apply MeasureTheory.HasFiniteIntegral.of_bounded (C := 1)
       filter_upwards with ω
       rw [Real.norm_eq_abs]
       by_cases hm : m = 0
@@ -1383,7 +1382,7 @@ lemma integral_alphaIic_eq_marginal
     have h_int_sum : ∫ ω, A m ω ∂μ =
         (1/(m:ℝ)) * ∑ k : Fin m, ∫ ω, ind (X (0 + k.val + 1) ω) ∂μ := by
       simp only [A]
-      rw [integral_mul_left]
+      rw [integral_const_mul]
       congr 1
       rw [integral_finset_sum]
       intro k _
@@ -1539,7 +1538,6 @@ def mapsWithCollision (m N : ℕ) (ij : Fin m × Fin m) : Finset (Fin m → Fin 
 **Proof:** A non-injective map has some pair (i, j) with i ≠ j and φ(i) = φ(j).
 By union bound over the m² pairs, and for each pair there are at most N^(m-1) maps.
 -/
-@[nolint unusedArguments]
 lemma card_nonInjective_le (m N : ℕ) (_hN : 0 < N) :
     Fintype.card {φ : Fin m → Fin N // ¬Function.Injective φ} ≤ m * m * N^(m - 1) := by
   classical
@@ -1761,7 +1759,6 @@ This is the key insight that makes the block-separated approach work:
 every selection is StrictMono, so contractability applies to EVERY term
 (no exchangeability required).
 -/
-@[nolint unusedArguments]
 lemma block_index_strictMono {m N : ℕ} (_hN : 0 < N) (φ : Fin m → Fin N) :
     StrictMono (fun i : Fin m => i.val * N + (φ i).val) := by
   intro i j hij
@@ -1891,4 +1888,3 @@ theorem directing_measure_satisfies_requirements
     exact directing_measure_bridge X hX_contract hX_meas hX_L2 k hk_inj B hB
 
 end Exchangeability.DeFinetti.ViaL2
-

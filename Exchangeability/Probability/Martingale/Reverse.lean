@@ -64,7 +64,6 @@ noncomputable def revCEFinite (f : Ω → ℝ) (𝔽 : ℕ → MeasurableSpace �
 **Proof:** For `i ≤ j`, we have `𝔽 (N - j) ≤ 𝔽 (N - i)`, so by the tower property:
   E[revCEFinite N j | revFiltration N i] = E[μ[f | 𝔽_{N-j}] | 𝔽_{N-i}] = μ[f | 𝔽_{N-i}] = revCEFinite N i
 -/
-@[nolint unusedArguments]
 lemma revCEFinite_martingale
     [IsProbabilityMeasure μ]
     (h_antitone : Antitone 𝔽) (h_le : ∀ n, 𝔽 n ≤ (inferInstance : MeasurableSpace Ω))
@@ -87,7 +86,6 @@ lemma revCEFinite_martingale
 /-- L¹ boundedness of conditional expectations.
 
 This is a standard property: `‖μ[f | m]‖₁ ≤ ‖f‖₁`. -/
-@[nolint unusedArguments]
 lemma eLpNorm_one_condExp_le_of_integrable
     {m : MeasurableSpace Ω} (f : Ω → ℝ) (_hf : Integrable f μ) :
     eLpNorm (μ[f | m]) 1 μ ≤ eLpNorm f 1 μ :=

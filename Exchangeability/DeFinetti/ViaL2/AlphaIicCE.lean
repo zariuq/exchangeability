@@ -59,7 +59,6 @@ existential `alphaIic` almost everywhere.
 - Monotone in `t` almost everywhere (from positivity of conditional expectation)
 - Endpoint limits follow from L¹ contraction and dominated convergence
 -/
-@[nolint unusedArguments]
 noncomputable def alphaIicCE
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (X : ℕ → Ω → ℝ) (hX_contract : Contractable μ X)
@@ -67,6 +66,8 @@ noncomputable def alphaIicCE
     (hX_L2 : ∀ i, MemLp (X i) 2 μ)
     (t : ℝ) : Ω → ℝ := by
   classical
+  let _ := hX_contract
+  let _ := hX_L2
   -- Set up the tail σ-algebra and its sub-σ-algebra relation
   have hm_le : TailSigma.tailSigma X ≤ (inferInstance : MeasurableSpace Ω) :=
     TailSigma.tailSigma_le X hX_meas
@@ -348,7 +349,7 @@ lemma alphaIicCE_right_continuous_at
         linarith
       apply Filter.Tendsto.congr' _ tendsto_const_nhds
       filter_upwards [h_ev] with n hn
-      simp only [Set.mem_Iic, not_le.mpr hn, ↓reduceIte]
+      simp only [not_le.mpr hn, ↓reduceIte]
 
   -- 3c: Each f_n is a.e. strongly measurable
   have h_meas : ∀ n, AEStronglyMeasurable (fs n) μ := fun n =>
@@ -434,7 +435,7 @@ lemma alphaIicCE_right_continuous_at
     -- u is strictly anti, so m ≤ n implies u n ≤ u m
     have h_u_le : (u n : ℝ) ≤ (u m : ℝ) := by
       rcases hmn.lt_or_eq with h | h
-      · exact le_of_lt (Rat.cast_lt.mpr (u_anti.lt_iff_lt.mpr h))
+      · exact le_of_lt (Rat.cast_lt.mpr (u_anti h))
       · simp [h]
     exact h_mono m n h_u_le
 

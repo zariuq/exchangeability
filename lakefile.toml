@@ -1,15 +1,13 @@
 name = "exchangeability"
 version = "0.1.0"
 defaultTargets = ["Exchangeability", "ForMathlib"]
+# Keep elaboration deterministic and under the workspace 6GB cap.
+weakLeanArgs = ["-j", "1"]
 
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.27.0-rc1"
-
-[[require]]
-name = "checkdecls"
-git = "https://github.com/PatrickMassot/checkdecls.git"
+rev = "v4.28.0"
 
 [[lean_lib]]
 name = "ForMathlib"

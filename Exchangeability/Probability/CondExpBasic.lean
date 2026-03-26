@@ -40,18 +40,16 @@ to work with multiple measurable space structures (e.g., for trimmed measures). 
 section variable `[MeasurableSpace Ω]` unused for those lemmas, requiring `set_option
 linter.unusedSectionVars false`. -/
 
-set_option linter.unusedSectionVars false in
+omit [MeasurableSpace Ω] in
 /-- If `μ` is finite, then any trim of `μ` is σ-finite. -/
-@[nolint unusedArguments]
 lemma sigmaFinite_trim_of_le {m m₀ : MeasurableSpace Ω}
     (μ : Measure Ω) [IsFiniteMeasure μ] (hm : m ≤ m₀) :
     SigmaFinite (μ.trim hm) :=
   (inferInstance : IsFiniteMeasure (μ.trim hm)).toSigmaFinite
 
-set_option linter.unusedSectionVars false in
+omit [MeasurableSpace Ω] in
 /-- For pairwise disjoint sets, the indicator of the union equals
 the pointwise `tsum` of indicators (for ℝ-valued constants). -/
-@[nolint unusedArguments]
 lemma indicator_iUnion_tsum_of_pairwise_disjoint
     (f : ℕ → Set Ω) (hdisj : Pairwise (Disjoint on f)) :
     (fun ω => ((⋃ i, f i).indicator (fun _ => (1 : ℝ)) ω))
@@ -82,10 +80,9 @@ lemma indicator_iUnion_tsum_of_pairwise_disjoint
     have : ∀ i, ω ∉ f i := fun i hi => h (Set.mem_iUnion.mpr ⟨i, hi⟩)
     simp [Set.indicator_of_notMem h, Set.indicator_of_notMem (this _)]
 
-set_option linter.unusedSectionVars false in
+omit [MeasurableSpace Ω] in
 /-- For pairwise disjoint sets, the tsum of indicators is bounded by 1 at each point.
 This follows from the fact that at most one indicator is 1 at any point. -/
-@[nolint unusedArguments]
 lemma indicator_tsum_le_one_of_pairwise_disjoint
     (f : ℕ → Set Ω) (hdisj : Pairwise (Disjoint on f)) (x : Ω) :
     ∑' i, (f i).indicator (fun _ => (1:ℝ)) x ≤ 1 := by
@@ -109,7 +106,6 @@ lemma indicator_tsum_le_one_of_pairwise_disjoint
   · have : ∀ i, x ∉ f i := fun i hi => hx (Set.mem_iUnion.mpr ⟨i, hi⟩)
     simp [Set.indicator_of_notMem (this _)]
 
-set_option linter.unusedSectionVars false in
 /-- For pairwise disjoint measurable sets, the tsum of measures equals the measure of the union. -/
 lemma measure_tsum_eq_measure_iUnion {α : Type*} [MeasurableSpace α]
     (μ : Measure α) (f : ℕ → Set α) (hf_meas : ∀ i, MeasurableSet (f i))
@@ -117,7 +113,6 @@ lemma measure_tsum_eq_measure_iUnion {α : Type*} [MeasurableSpace α]
     ∑' i, μ (f i) = μ (⋃ i, f i) :=
   (measure_iUnion (fun _ _ hij => hdisj hij) hf_meas).symm
 
-set_option linter.unusedSectionVars false in
 /-- For pairwise disjoint measurable sets under a probability measure,
 the tsum of measures is at most 1. -/
 lemma measure_tsum_le_one_of_pairwise_disjoint {α : Type*} [MeasurableSpace α]

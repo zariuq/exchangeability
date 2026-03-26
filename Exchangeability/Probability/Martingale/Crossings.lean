@@ -583,19 +583,21 @@ lemma condExp_exists_ae_limit_antitone
       have hU_meas : ∀ N, Measurable (U N) := by
         intro N
         simp only [hU]
-        -- upcrossingsBefore is measurable for adapted processes
-        -- Define the constant filtration (all same σ-algebra)
-        let ℱ : Filtration ℕ (inferInstance : MeasurableSpace Ω) := {
-          seq := fun _ => (inferInstance : MeasurableSpace Ω)
+        -- upcrossingsBefore is measurable for strongly adapted processes
+        -- Define the constant filtration (all same σ-algebra).
+        let mΩ : MeasurableSpace Ω := inferInstance
+        let 𝒢 : Filtration ℕ mΩ := {
+          seq := fun _ => mΩ
           mono' := fun _ _ _ => le_refl _
           le' := fun _ => le_refl _
         }
-        -- The process μ[f | 𝔽 n] is adapted to this constant filtration
-        have h_adapted : Adapted ℱ (fun n => μ[f | 𝔽 n]) := by
+        -- The process μ[f | 𝔽 n] is strongly adapted to this constant filtration.
+        have h_adapted : StronglyAdapted 𝒢 (fun n => μ[f | 𝔽 n]) := by
           intro n
           exact stronglyMeasurable_condExp.mono (h_le n)
-        -- Apply measurability for adapted processes
-        exact measurable_from_top.comp (h_adapted.measurable_upcrossingsBefore hab')
+        -- Cast ℕ-valued upcrossingsBefore to ℝ≥0∞.
+        have h_cast : Measurable (fun n : ℕ => (n : ℝ≥0∞)) := Measurable.of_discrete
+        exact h_cast.comp (h_adapted.measurable_upcrossingsBefore hab')
 
       -- Apply monotone convergence theorem
       have h_iSup : ∫⁻ ω, (⨆ N, U N ω) ∂μ = ⨆ N, ∫⁻ ω, U N ω ∂μ := by
@@ -611,14 +613,16 @@ lemma condExp_exists_ae_limit_antitone
 
     -- Apply ae_lt_top: measurable function with finite expectation is a.e. finite
     refine ae_lt_top ?_ (lt_of_le_of_lt h_exp_orig h_C_finite).ne
-    -- Measurability: upcrossings of an adapted process
-    -- The sequence μ[f | 𝔽 n] is adapted to the trivial filtration (constant ambient σ-algebra)
-    let ℱ : Filtration ℕ (inferInstance : MeasurableSpace Ω) := {
-      seq := fun _ => (inferInstance : MeasurableSpace Ω)
+    -- Measurability: upcrossings of a strongly adapted process.
+    -- The sequence μ[f | 𝔽 n] is strongly adapted to the trivial filtration
+    -- (constant ambient σ-algebra).
+    let mΩ : MeasurableSpace Ω := inferInstance
+    let 𝒢 : Filtration ℕ mΩ := {
+      seq := fun _ => mΩ
       mono' := fun _ _ _ => le_refl _
       le' := fun _ => le_refl _
     }
-    have h_adapted : Adapted ℱ (fun n => μ[f | 𝔽 n]) := by
+    have h_adapted : StronglyAdapted 𝒢 (fun n => μ[f | 𝔽 n]) := by
       intro n
       exact stronglyMeasurable_condExp.mono (h_le n)
     exact h_adapted.measurable_upcrossings hab'
@@ -702,7 +706,6 @@ lemma condExp_exists_ae_limit_antitone
 
 This is a direct application of mathlib's `Integrable.uniformIntegrable_condExp`,
 which works for any family of sub-σ-algebras (not just filtrations). -/
-@[nolint unusedArguments]
 lemma uniformIntegrable_condexp_antitone
     [IsProbabilityMeasure μ] {𝔽 : ℕ → MeasurableSpace Ω}
     (_h_antitone : Antitone 𝔽) (h_le : ∀ n, 𝔽 n ≤ (inferInstance : MeasurableSpace Ω))
@@ -722,7 +725,6 @@ The key observation: For antitone 𝔽 (𝔽 n decreases as n increases):
 - Hence Xlim is F_inf-measurable (up to a.e. equality)
 
 This is crucial for showing that reverse martingale limits satisfy μ[Xlim | F_inf] = Xlim. -/
-@[nolint unusedArguments]
 lemma aestronglyMeasurable_iInf_of_tendsto_ae_antitone
     {𝔽 : ℕ → MeasurableSpace Ω} (h_antitone : Antitone 𝔽)
     (_h_le : ∀ n, 𝔽 n ≤ (inferInstance : MeasurableSpace Ω))

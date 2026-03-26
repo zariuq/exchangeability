@@ -50,7 +50,6 @@ variable {α : Type*} [MeasurableSpace α]
 def tailCylinder (r : ℕ) (C : Fin r → Set α) : Set (ℕ → α) :=
   {f | ∀ i : Fin r, f (i.1 + 1) ∈ C i}
 
-set_option linter.unusedSectionVars false in
 /-- Basic measurability for tail cylinders. -/
 @[measurability]
 lemma tailCylinder_measurable {r : ℕ} {C : Fin r → Set α}

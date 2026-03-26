@@ -373,7 +373,7 @@ lemma kallenberg_L2_bound
       contradiction
 
     -- Case split on ordering
-    rcases hij'.lt_or_lt with h_lt | h_lt
+    rcases lt_or_gt_of_ne hij' with h_lt | h_lt
     · -- Case i' < j': Use contractable_map_pair directly
       have h_dist := Exchangeability.DeFinetti.L2Helpers.contractable_map_pair
         (X := Z) hZ_contract hZ_meas h_lt
@@ -549,7 +549,7 @@ lemma kallenberg_L2_bound
           · intro i _; exact (enum i).property
           · intro a ha; simp
           · intro a ha; simp
-          · intro i hi; simp [OrderIso.symm_apply_apply]
+          · intro i hi; simp
           · intro a ha; simp
         exact h_bij
       rw [this]; exact hp_prob.1
@@ -569,7 +569,7 @@ lemma kallenberg_L2_bound
           · intro i _; exact (enum i).property
           · intro a ha; simp
           · intro a ha; simp
-          · intro i hi; simp [OrderIso.symm_apply_apply]
+          · intro i hi; simp
           · intro a ha; simp
         exact h_bij
       rw [this]; exact hq_prob.1
@@ -758,7 +758,7 @@ lemma kallenberg_L2_bound
           · intro k _; exact (enum k).property
           · intro i hi; simp
           · intro i hi; simp
-          · intro k hk; simp [OrderIso.symm_apply_apply]
+          · intro k hk; simp
           · intro i hi; simp
     _ = ∫ ω, (∑ k : Fin n, p' k * ξ k ω - ∑ k : Fin n, q' k * ξ k ω) ^ 2 ∂μ := by
           congr 1; ext ω
@@ -800,13 +800,13 @@ lemma kallenberg_L2_bound
    a massive indentation when handling the ρ = 1 edge case separately. -/
 private lemma cesaro_cauchy_rho_lt
     {μ : Measure Ω} [IsProbabilityMeasure μ]
-    {X : ℕ → Ω → ℝ} (hX_contract : Exchangeability.Contractable μ X)
+    {X : ℕ → Ω → ℝ} (_hX_contract : Exchangeability.Contractable μ X)
     (hX_meas : ∀ i, Measurable (X i))
     (f : ℝ → ℝ) (hf_meas : Measurable f) (hf_bdd : ∀ x, |f x| ≤ 1)
     (m_mean : ℝ) (hm_mean : m_mean = ∫ ω, f (X 0 ω) ∂μ)
     (Z : ℕ → Ω → ℝ) (hZ_def : ∀ i ω, Z i ω = f (X i ω) - m_mean)
     (hZ_meas : ∀ i, Measurable (Z i))
-    (hZ_contract : Exchangeability.Contractable μ Z)
+    (_hZ_contract : Exchangeability.Contractable μ Z)
     (hZ_var_uniform : ∀ i, ∫ ω, (Z i ω)^2 ∂μ = ∫ ω, (Z 0 ω)^2 ∂μ)
     (hZ_mean_zero : ∀ i, ∫ ω, Z i ω ∂μ = 0)
     (hZ_cov_uniform : ∀ i j, i ≠ j → ∫ ω, Z i ω * Z j ω ∂μ = ∫ ω, Z 0 ω * Z 1 ω ∂μ)
@@ -1527,7 +1527,7 @@ private lemma blockAvg_cauchy_in_L2
         σSq hσ_pos rfl ρ hρ_bd rfl hρ_lt Cf rfl ε hε
 
     · -- Edge case: ρ = 1 (perfect correlation) → blockAvg values are ae-equal
-      have hρ_eq : ρ = 1 := le_antisymm hρ_bd.2 (le_of_not_lt hρ_lt)
+      have hρ_eq : ρ = 1 := le_antisymm hρ_bd.2 (not_lt.mp hρ_lt)
       -- When ρ = 1, Z_i = Z_0 a.e., so blockAvg values are equal a.e.
       -- Note: We only prove this for n, n' > 0, which suffices since we use N = 1 below.
       -- (The general case for all n, n' ∈ ℕ is also true, but not needed.)
@@ -1976,11 +1976,10 @@ private lemma l2_limit_from_cauchy
 
 The block average `blockAvg f X m n` only depends on `X m, X (m+1), ..., X (m+n-1)`,
 which are all measurable w.r.t. `tailFamily X m`. -/
-@[nolint unusedArguments]
 lemma blockAvg_measurable_tailFamily
     {Ω : Type*} [MeasurableSpace Ω]
     {f : ℝ → ℝ} (hf : Measurable f)
-    {X : ℕ → Ω → ℝ} (hX : ∀ i, Measurable (X i))
+    {X : ℕ → Ω → ℝ} (_hX : ∀ i, Measurable (X i))
     (m n : ℕ) :
     Measurable[TailSigma.tailFamily X m] (blockAvg f X m n) := by
   -- blockAvg f X m n = (n⁻¹) * ∑_{k<n} f(X_{m+k})
@@ -2194,7 +2193,7 @@ private lemma blockAvg_shift_tendsto
             · norm_num
       _ = eLpNorm (((N + m : ℝ) / m) • (blockAvg f X 0 (N + m) - α_f)) 2 μ
           + eLpNorm ((N / m : ℝ) • (blockAvg f X 0 N - α_f)) 2 μ := by
-            congr 1 <;> { congr 1; ext ω; simp [Pi.smul_apply, Pi.sub_apply] }
+            rfl
       _ = ‖((N + m : ℝ) / m)‖ₑ * eLpNorm (blockAvg f X 0 (N + m) - α_f) 2 μ
           + ‖(N / m : ℝ)‖ₑ * eLpNorm (blockAvg f X 0 N - α_f) 2 μ := by
             rw [eLpNorm_const_smul, eLpNorm_const_smul]
@@ -3019,12 +3018,11 @@ If `Xₙ → X` a.e. and each `Xₙ`, `X` is measurable, and `t` is a continuity
 This is the Dominated Convergence Theorem: indicator functions are bounded by 1,
 and converge pointwise a.e. The continuity set assumption ensures we avoid the
 boundary case where convergence can fail (when X ω = t and Xn oscillates around t). -/
-@[nolint unusedArguments]
 theorem tendsto_integral_indicator_Iic
   {Ω : Type*} [MeasurableSpace Ω]
   {μ : Measure Ω} [IsProbabilityMeasure μ]
   (Xn : ℕ → Ω → ℝ) (X : Ω → ℝ) (t : ℝ)
-  (hXn_meas : ∀ n, Measurable (Xn n)) (hX_meas : Measurable (X))
+  (hXn_meas : ∀ n, Measurable (Xn n)) (_hX_meas : Measurable (X))
   (hae : ∀ᵐ ω ∂μ, Tendsto (fun n => Xn n ω) atTop (𝓝 (X ω)))
   (h_cont : μ (X ⁻¹' {t}) = 0) :
   Tendsto (fun n => ∫ ω, (Set.Iic t).indicator (fun _ => (1 : ℝ)) (Xn n ω) ∂μ)
@@ -3098,6 +3096,7 @@ The key insight is that shifting the Cesàro window by n changes at most 2n term
 (n removed from front, n added at back), each bounded by 1, giving an O(n/m) error.
 -/
 
+omit [MeasurableSpace Ω] in
 /-- Deterministic bound: shifting the Cesàro window by `n` changes the average by at most 2n/m.
 This follows from the fact that the shifted and unshifted sums differ by at most 2n terms. -/
 private lemma cesaro_shift_diff_pointwise
@@ -3227,7 +3226,7 @@ lemma cesaro_convergence_all_shifts
         ≤ ∫ _, (2*n:ℝ)/m ∂μ :=
           integral_mono_of_nonneg (ae_of_all μ (fun _ => abs_nonneg _))
             (integrable_const _) (ae_of_all μ hterm1_pointwise)
-      _ = (2*n:ℝ)/m := by simp [measure_univ]
+      _ = (2*n:ℝ)/m := by simp
 
   -- Show (2n)/m < ε/2
   have hterm1_lt : (2*n:ℝ)/m < ε/2 := by
@@ -3325,4 +3324,3 @@ lemma cesaro_convergence_all_shifts
     _ = ε := by ring
 
 end Exchangeability.DeFinetti.ViaL2
-

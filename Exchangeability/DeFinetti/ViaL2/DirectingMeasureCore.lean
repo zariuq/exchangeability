@@ -72,7 +72,7 @@ lemma cdf_from_alpha_mono
     (hX_meas : ∀ i, Measurable (X i))
     (hX_L2 : ∀ i, MemLp (X i) 2 μ)
     (ω : Ω) :
-    Monotone (cdf_from_alpha X hX_contract hX_meas hX_L2 ω) := fun s t hst =>
+    Monotone (cdf_from_alpha X hX_contract hX_meas hX_L2 ω) := fun _ _ hst =>
   (ProbabilityTheory.stieltjesOfMeasurableRat
       (alphaIicRat X hX_contract hX_meas hX_L2)
       (measurable_alphaIicRat X hX_contract hX_meas hX_L2)

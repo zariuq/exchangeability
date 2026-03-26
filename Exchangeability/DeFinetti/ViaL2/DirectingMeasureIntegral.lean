@@ -457,10 +457,10 @@ lemma integral_indicator_borel_tailAEStronglyMeasurable
             1 - t.indicator (fun _ => (1:ℝ)) x := by
           intro x
           by_cases hx : x ∈ t
-          · simp [Set.indicator_of_mem hx, Set.indicator_of_not_mem (Set.not_mem_compl_iff.mpr hx)]
-          · simp [Set.indicator_of_not_mem hx, Set.indicator_of_mem (Set.mem_compl hx)]
+          · simp [Set.indicator_of_mem hx, Set.indicator_of_notMem (Set.notMem_compl_iff.mpr hx)]
+          · simp [Set.indicator_of_notMem hx, Set.indicator_of_mem (Set.mem_compl hx)]
         simp_rw [h_ind_compl]
-        rw [integral_sub (integrable_const 1), integral_const, measureReal_univ_eq_one, one_smul]
+        rw [integral_sub (integrable_const 1), integral_const, MeasureTheory.probReal_univ, one_smul]
         exact (integrable_const 1).indicator ht_meas
       simp_rw [h_eq]
       exact aestronglyMeasurable_const.sub ht_aesm
@@ -492,10 +492,10 @@ lemma integral_indicator_borel_tailAEStronglyMeasurable
               exact (hdisj n m (Ne.symm hm)).ne_of_mem hn hxm rfl
             rw [tsum_eq_single n]
             · simp [Set.indicator_of_mem hn]
-            · intro m hm; simp [Set.indicator_of_not_mem (h_unique m hm)]
-          · simp only [Set.indicator_of_not_mem hx]
+            · intro m hm; simp [Set.indicator_of_notMem (h_unique m hm)]
+          · simp only [Set.indicator_of_notMem hx]
             have : ∀ n, x ∉ f n := fun n hn => hx (Set.mem_iUnion.mpr ⟨n, hn⟩)
-            simp [Set.indicator_of_not_mem (this _)]
+            simp [Set.indicator_of_notMem (this _)]
         simp_rw [h_ind_union]
         -- integral of tsum = tsum of integrals (for nonneg functions)
         rw [integral_tsum]
@@ -601,7 +601,7 @@ lemma integral_indicator_borel_tailAEStronglyMeasurable
                       rw [Finset.sum_eq_zero h_zero]
                       exact zero_le_one
                   exact this
-            _ = 1 := by simp [measureReal_univ_eq_one]
+            _ = 1 := by simp [MeasureTheory.probReal_univ]
         have h_summable : Summable (fun n => ∫ x, (f n).indicator (fun _ => (1:ℝ)) x
             ∂(directing_measure X hX_contract hX_meas hX_L2 ω)) :=
           summable_of_sum_range_le h_nonneg h_partial_le
@@ -898,7 +898,6 @@ lemma integral_bounded_measurable_tailAEStronglyMeasurable
 
 Base case: For Iic indicators, set integral equality follows from
 `directing_measure_integral_Iic_ae_eq_alphaIicCE` + `setIntegral_condExp`. -/
-@[nolint unusedArguments]
 lemma setIntegral_directing_measure_indicator_Iic_eq
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (X : ℕ → Ω → ℝ) (hX_contract : Contractable μ X)
@@ -910,6 +909,7 @@ lemma setIntegral_directing_measure_indicator_Iic_eq
     ∫ ω in A, (∫ x, (Set.Iic t).indicator (fun _ => (1:ℝ)) x
         ∂(directing_measure X hX_contract hX_meas hX_L2 ω)) ∂μ
       = ∫ ω in A, (Set.Iic t).indicator (fun _ => (1:ℝ)) (X 0 ω) ∂μ := by
+  let _ := hμA
   -- Set up σ-algebra facts
   have hm_le : TailSigma.tailSigma X ≤ (inferInstance : MeasurableSpace Ω) :=
     TailSigma.tailSigma_le X hX_meas
@@ -1000,10 +1000,10 @@ lemma setIntegral_directing_measure_indicator_eq
               1 - t.indicator (fun _ => (1:ℝ)) x := by
             intro x
             by_cases hx : x ∈ t
-            · simp [Set.indicator_of_mem hx, Set.indicator_of_not_mem (Set.not_mem_compl_iff.mpr hx)]
-            · simp [Set.indicator_of_not_mem hx, Set.indicator_of_mem (Set.mem_compl hx)]
+            · simp [Set.indicator_of_mem hx, Set.indicator_of_notMem (Set.notMem_compl_iff.mpr hx)]
+            · simp [Set.indicator_of_notMem hx, Set.indicator_of_mem (Set.mem_compl hx)]
           simp_rw [h_ind_compl]
-          rw [integral_sub (integrable_const 1), integral_const, measureReal_univ_eq_one, one_smul]
+          rw [integral_sub (integrable_const 1), integral_const, MeasureTheory.probReal_univ, one_smul]
           exact (integrable_const 1).indicator ht_meas
         simp_rw [h_compl_eq]
         rw [integral_sub, integral_const]
@@ -1027,15 +1027,15 @@ lemma setIntegral_directing_measure_indicator_eq
                   · exact ae_of_all _ (fun x => by
                       simp only [Set.indicator_apply]
                       split_ifs <;> simp)
-              _ = 1 := by simp [measureReal_univ_eq_one]
+              _ = 1 := by simp [MeasureTheory.probReal_univ]
       have h_rhs_eq : ∫ ω in A, tᶜ.indicator (fun _ => (1:ℝ)) (X 0 ω) ∂μ =
           ∫ ω in A, (1 : ℝ) ∂μ - ∫ ω in A, t.indicator (fun _ => (1:ℝ)) (X 0 ω) ∂μ := by
         have h_ind_compl : ∀ ω, tᶜ.indicator (fun _ => (1:ℝ)) (X 0 ω) =
             1 - t.indicator (fun _ => (1:ℝ)) (X 0 ω) := by
           intro ω
           by_cases hx : X 0 ω ∈ t
-          · simp [Set.indicator_of_mem hx, Set.indicator_of_not_mem (Set.not_mem_compl_iff.mpr hx)]
-          · simp [Set.indicator_of_not_mem hx, Set.indicator_of_mem (Set.mem_compl hx)]
+          · simp [Set.indicator_of_mem hx, Set.indicator_of_notMem (Set.notMem_compl_iff.mpr hx)]
+          · simp [Set.indicator_of_notMem hx, Set.indicator_of_mem (Set.mem_compl hx)]
         simp_rw [h_ind_compl]
         rw [integral_sub, integral_const]
         · exact (integrable_const 1).integrableOn
@@ -1072,10 +1072,10 @@ lemma setIntegral_directing_measure_indicator_eq
                 intro m hm hxm; exact (hdisj n m (Ne.symm hm)).ne_of_mem hn hxm rfl
               rw [tsum_eq_single n]
               · simp [Set.indicator_of_mem hn]
-              · intro m hm; simp [Set.indicator_of_not_mem (h_unique m hm)]
-            · simp only [Set.indicator_of_not_mem hx]
+              · intro m hm; simp [Set.indicator_of_notMem (h_unique m hm)]
+            · simp only [Set.indicator_of_notMem hx]
               have : ∀ n, x ∉ f n := fun n hn => hx (Set.mem_iUnion.mpr ⟨n, hn⟩)
-              simp [Set.indicator_of_not_mem (this _)]
+              simp [Set.indicator_of_notMem (this _)]
           simp_rw [h_ind_union]
           rw [integral_tsum]
           · exact fun n => (measurable_const.indicator (hf n).1).aestronglyMeasurable
@@ -1159,10 +1159,10 @@ lemma setIntegral_directing_measure_indicator_eq
               intro m hm hxm; exact (hdisj n m (Ne.symm hm)).ne_of_mem hn hxm rfl
             rw [tsum_eq_single n]
             · simp [Set.indicator_of_mem hn]
-            · intro m hm; simp [Set.indicator_of_not_mem (h_unique m hm)]
-          · simp only [Set.indicator_of_not_mem hx]
+            · intro m hm; simp [Set.indicator_of_notMem (h_unique m hm)]
+          · simp only [Set.indicator_of_notMem hx]
             have : ∀ n, X 0 ω ∉ f n := fun n hn => hx (Set.mem_iUnion.mpr ⟨n, hn⟩)
-            simp [Set.indicator_of_not_mem (this _)]
+            simp [Set.indicator_of_notMem (this _)]
         simp_rw [h_ind_union]
         rw [integral_tsum]
         · intro n
@@ -1177,8 +1177,8 @@ lemma setIntegral_directing_measure_indicator_eq
                 (X 0 ⁻¹' (f n)).indicator (fun _ => (1:ENNReal)) ω := by
               intro ω
               by_cases hω : X 0 ω ∈ f n
-              · simp [Set.indicator_of_mem hω, Set.mem_preimage, hω]
-              · simp [Set.indicator_of_notMem hω, Set.mem_preimage, hω]
+              · simp [Set.mem_preimage, hω]
+              · simp [Set.mem_preimage, hω]
             simp_rw [h_simp]
             have h_ind_eq : (fun ω => (X 0 ⁻¹' (f n)).indicator (fun _ => (1:ENNReal)) ω) =
                 (X 0 ⁻¹' (f n)).indicator 1 := by ext; simp [Set.indicator]
@@ -1288,7 +1288,7 @@ lemma setIntegral_directing_measure_bounded_measurable_eq
               have := hφ_range n x
               rw [Set.mem_Icc] at this
               exact abs_le.mpr this
-        _ = M' := by simp [measureReal_univ_eq_one]
+        _ = M' := by simp [MeasureTheory.probReal_univ]
     · filter_upwards with ω
       -- ∫ φ_n dν(ω) → ∫ f dν(ω) by DCT on ν(ω)
       haveI hprob := directing_measure_isProbabilityMeasure X hX_contract hX_meas hX_L2 ω
@@ -1549,7 +1549,7 @@ lemma directing_measure_integral_eq_condExp
           · exact ae_of_all _ (fun _ => abs_nonneg _)
           · exact integrable_const M'
           · exact ae_of_all _ hM'
-      _ = M' := by simp only [integral_const, measureReal_univ_eq_one, smul_eq_mul, one_mul]
+      _ = M' := by simp only [integral_const, MeasureTheory.probReal_univ, smul_eq_mul, one_mul]
 
   -- g is AEStronglyMeasurable w.r.t. ambient σ-algebra
   -- Uses monotone class theorem: measurability extends from Iic indicators to bounded measurable f.
@@ -1760,10 +1760,8 @@ lemma directing_measure_integral_via_chain
         -- Use condExp linearity: E[M * h | m] = M * E[h | m]
         have h_ae : μ[fun ω => M * g (X 0 ω) | TailSigma.tailSigma X]
             =ᵐ[μ] fun ω => M * μ[g ∘ X 0 | TailSigma.tailSigma X] ω := by
-          -- Use condExp_smul with appropriate coercions
-          have h_smul := condExp_smul M (g ∘ X 0) (m := TailSigma.tailSigma X) (μ := μ)
-          simp only [smul_eq_mul, Pi.smul_apply] at h_smul
-          convert h_smul using 2 <;> ext ω <;> ring
+          simpa [smul_eq_mul] using
+            (condExp_smul M (g ∘ X 0) (m := TailSigma.tailSigma X) (μ := μ))
         calc μ[f ∘ X 0 | TailSigma.tailSigma X]
             = μ[fun ω => M * g (X 0 ω) | TailSigma.tailSigma X] := by rw [h_comp_eq]
           _ =ᵐ[μ] fun ω => M * μ[g ∘ X 0 | TailSigma.tailSigma X] ω := h_ae
@@ -1850,7 +1848,7 @@ lemma directing_measure_integral_via_chain
                                 gcongr; exact Finset.abs_sum_le_sum_abs _ _
                             _ ≤ (m:ℝ)⁻¹ * ∑ k : Fin m, (1:ℝ) := by
                                 gcongr with k _; exact hg_bdd _
-                            _ = 1 := by simp [Finset.sum_const, Finset.card_fin]; field_simp [hm]
+                            _ = 1 := by simp [Finset.sum_const]; field_simp [hm]
                       have hg_avg_bdd' : ∀ᵐ ω ∂μ, ‖(1/(m:ℝ)) * ∑ k : Fin m, g (X (k.val+1) ω)‖ ≤ 1 := by
                         apply ae_of_all μ
                         intro ω
@@ -1884,7 +1882,7 @@ lemma directing_measure_integral_via_chain
                               gcongr; exact Finset.abs_sum_le_sum_abs _ _
                           _ ≤ (m:ℝ)⁻¹ * ∑ k : Fin m, (1:ℝ) := by
                               gcongr with k _; exact hg_bdd _
-                          _ = 1 := by simp [Finset.sum_const, Finset.card_fin]; field_simp [hm]
+                          _ = 1 := by simp [Finset.sum_const]; field_simp [hm]
                     have hg_avg_bdd' : ∀ᵐ ω ∂μ, ‖(1/(m:ℝ)) * ∑ k : Fin m, g (X (k.val+1) ω)‖ ≤ 1 := by
                       apply ae_of_all μ
                       intro ω
@@ -1930,7 +1928,7 @@ lemma directing_measure_integral_via_chain
             _ = ∫ ω, |M| * |(1/(m:ℝ)) * ∑ k : Fin m, g (X (k.val+1) ω) - α_g ω| ∂μ := by
                   congr 1; ext ω; rw [← mul_sub, abs_mul]
             _ = |M| * ∫ ω, |(1/(m:ℝ)) * ∑ k : Fin m, g (X (k.val+1) ω) - α_g ω| ∂μ := by
-                  rw [integral_mul_left]
+                  rw [integral_const_mul]
             _ < |M| * (ε / (|M| + 1)) := by
                   gcongr; exact hM_idx m hm
             _ < (|M| + 1) * (ε / (|M| + 1)) := by
@@ -1957,7 +1955,7 @@ lemma directing_measure_integral_via_chain
                     gcongr; exact Finset.abs_sum_le_sum_abs _ _
               _ ≤ (m:ℝ)⁻¹ * ∑ k : Fin m, M := by
                     gcongr with k _; exact hM _
-              _ = M := by simp [Finset.sum_const, Finset.card_fin]; field_simp [hm]
+              _ = M := by simp [Finset.sum_const]; field_simp [hm]
 
         have hAalpha_integrable : ∀ m, Integrable (fun ω => A m ω - alpha ω) μ := fun m =>
           (Integrable.of_bound (hA_meas m).aestronglyMeasurable M (ae_of_all μ (hA_bdd m))).sub

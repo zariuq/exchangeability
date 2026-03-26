@@ -48,20 +48,17 @@ This is the conditional expectation of the indicator function of `A`.
 
 We define it using mathlib's `condexp` applied to the indicator function.
 -/
-@[nolint unusedArguments]
 noncomputable def condProb {m₀ : MeasurableSpace Ω} (μ : Measure Ω) [IsProbabilityMeasure μ]
     (m : MeasurableSpace Ω) (A : Set Ω) : Ω → ℝ :=
   μ[A.indicator (fun _ => (1 : ℝ)) | m]
 
-set_option linter.unusedSectionVars false in
-@[nolint unusedArguments]
+omit [MeasurableSpace Ω] in
 lemma condProb_def {m₀ : MeasurableSpace Ω} (μ : Measure Ω) [IsProbabilityMeasure μ]
     (m : MeasurableSpace Ω) (A : Set Ω) :
     condProb μ m A = μ[A.indicator (fun _ => (1 : ℝ)) | m] := rfl
 
-set_option linter.unusedSectionVars false in
+omit [MeasurableSpace Ω] in
 /-- Conditional probability takes values in `[0,1]` almost everywhere. -/
-@[nolint unusedArguments]
 lemma condProb_ae_nonneg_le_one {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     [IsProbabilityMeasure μ] (m : MeasurableSpace Ω) (hm : m ≤ m₀)
     [SigmaFinite (μ.trim hm)] {A : Set Ω} (hA : MeasurableSet[m₀] A) :
@@ -86,9 +83,8 @@ lemma condProb_ae_nonneg_le_one {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
   filter_upwards [h₀, h₁] with ω h0 h1
   exact ⟨h0, by simpa using h1⟩
 
-set_option linter.unusedSectionVars false in
+omit [MeasurableSpace Ω] in
 /-- Uniform bound: conditional probability is in `[0,1]` a.e. uniformly over `A`. -/
-@[nolint unusedArguments]
 lemma condProb_ae_bound_one {m₀ : MeasurableSpace Ω} {μ : Measure Ω} [IsProbabilityMeasure μ]
     (m : MeasurableSpace Ω) (hm : m ≤ m₀) [SigmaFinite (μ.trim hm)]
     (A : Set Ω) (hA : MeasurableSet[m₀] A) :
@@ -101,10 +97,9 @@ lemma condProb_ae_bound_one {m₀ : MeasurableSpace Ω} {μ : Measure Ω} [IsPro
     simpa [this]
   simpa [Real.norm_eq_abs, condProb] using this
 
-set_option linter.unusedSectionVars false in
+omit [MeasurableSpace Ω] in
 /-- Conditional probability integrates to the expected measure on sets that are
 measurable with respect to the conditioning σ-algebra. -/
-@[nolint unusedArguments]
 lemma condProb_integral_eq {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     [IsProbabilityMeasure μ] (m : MeasurableSpace Ω) (hm : m ≤ m₀)
     [SigmaFinite (μ.trim hm)] {A B : Set Ω} (hA : MeasurableSet[m₀] A)
@@ -131,8 +126,8 @@ lemma condProb_integral_eq {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
   simpa [condProb, h_indicator, h_const, Set.inter_comm, Set.inter_left_comm, Set.inter_assoc]
     using h_condexp
 
-set_option linter.unusedSectionVars false in
-@[simp, nolint unusedArguments]
+omit [MeasurableSpace Ω] in
+@[simp]
 lemma condProb_univ {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     [IsProbabilityMeasure μ] (m : MeasurableSpace Ω) (hm : m ≤ m₀)
     [SigmaFinite (μ.trim hm)] :
@@ -142,8 +137,8 @@ lemma condProb_univ {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     funext ω; simp [Set.indicator]
   simp [condProb, this, condExp_const (μ := μ) (m := m) hm (1 : ℝ)]
 
-set_option linter.unusedSectionVars false in
-@[simp, nolint unusedArguments]
+omit [MeasurableSpace Ω] in
+@[simp]
 lemma condProb_empty {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     [IsProbabilityMeasure μ] (m : MeasurableSpace Ω) (hm : m ≤ m₀) :
     condProb μ m (∅ : Set Ω) =ᵐ[μ] (fun _ => (0 : ℝ)) := by
@@ -152,8 +147,8 @@ lemma condProb_empty {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     funext ω; simp [Set.indicator]
   simp [condProb, this, condExp_const (μ := μ) (m := m) hm (0 : ℝ)]
 
-set_option linter.unusedSectionVars false in
-@[simp, nolint unusedArguments]
+omit [MeasurableSpace Ω] in
+@[simp]
 lemma condProb_compl {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     [IsProbabilityMeasure μ] (m : MeasurableSpace Ω) (hm : m ≤ m₀)
     [SigmaFinite (μ.trim hm)] {A : Set Ω} (hA : MeasurableSet[m₀] A) :

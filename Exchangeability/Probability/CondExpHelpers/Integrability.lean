@@ -45,7 +45,6 @@ expectation is a.e. bounded by the conditional expectation of the absolute value
 
 For integrable `f`: `|μ[f|m]| ≤ μ[|f||m]` almost everywhere.
 -/
-@[nolint unusedArguments]
 lemma abs_condExp_le_condExp_abs
     {Ω : Type*} {m m₀ : MeasurableSpace Ω} {μ : Measure Ω}
     (hm : m ≤ m₀) [SigmaFinite (μ.trim hm)]
@@ -109,7 +108,6 @@ you at least as much information as knowing `η = g(ζ)`.
 
 **Mathematical statement:** σ(η) ≤ σ(ζ) when η = g ∘ ζ.
 -/
-@[nolint unusedArguments]
 lemma sigma_factor_le {Ω α β : Type*}
     [MeasurableSpace Ω] [MeasurableSpace α] [MeasurableSpace β]
     {η : Ω → α} {ζ : Ω → β} {g : β → α}

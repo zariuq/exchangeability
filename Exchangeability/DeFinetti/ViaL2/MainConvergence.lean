@@ -249,7 +249,7 @@ theorem weighted_sums_converge_L1
       convert h using 2
       ext ω
       simp only [A]
-      congr 2 <;> (congr 1; apply Finset.sum_congr rfl; intro i _; congr; omega)
+      congr 2; (congr 1; apply Finset.sum_congr rfl; intro i _; congr; omega)
 
     -- Segment 2: ‖A (m-k) k - A (ℓ-k) k‖₂² ≤ Cf/k
     have h2 : ∫ ω, (A (m - k) k ω - A (ℓ - k) k ω)^2 ∂μ ≤ Cf / k := by
@@ -262,7 +262,7 @@ theorem weighted_sums_converge_L1
         convert h using 2
         ext ω
         simp only [A]
-        congr 2 <;> (congr 1; apply Finset.sum_congr rfl; intro i _; congr; omega)
+        congr 2; (congr 1; apply Finset.sum_congr rfl; intro i _; congr; omega)
       have : ∀ ω, (A (ℓ - k) k ω - A 0 ℓ ω)^2 = (A 0 ℓ ω - A (ℓ - k) k ω)^2 := by
         intro ω; ring
       simp_rw [this]; exact h_sq
@@ -637,7 +637,6 @@ summability of expectations.
 
 Note: Adapted to our L¹ convergence setting.
 -/
-@[nolint unusedArguments]
 theorem subsequence_criterion_convergence_in_probability
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (ξ : ℕ → Ω → ℝ) (ξ_limit : Ω → ℝ)
@@ -814,7 +813,6 @@ of conditional expectation.
 
 This private placeholder exists only so the file compiles while we develop other parts.
 -/
-@[nolint unusedArguments]
 private theorem alpha_is_reverse_martingale
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (_X : ℕ → Ω → ℝ) (_hX_contract : Contractable μ _X)
@@ -840,7 +838,6 @@ for any i ∈ I:
 This private placeholder exists only so the file compiles while we develop other parts.
 The parameters document the intended signature for the full implementation.
 -/
-@[nolint unusedArguments]
 private theorem contractability_conditional_expectation
     {μ : Measure Ω} [IsProbabilityMeasure μ]
     (_X : ℕ → Ω → ℝ) (_hX_contract : Contractable μ _X)
@@ -856,4 +853,3 @@ private theorem contractability_conditional_expectation
 proof in `MoreL2Helpers.lean` (at the `ViaL2` namespace level). It was removed from
 here since it wasn't used in the critical path. The critical path uses
 `directing_measure_satisfies_requirements` from MoreL2Helpers instead. -/
-
