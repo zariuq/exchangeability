@@ -671,8 +671,8 @@ lemma integral_indicator_borel_tailAEStronglyMeasurable
         -- that the pointwise limit of tail-SM functions is tail-SM
         let g_tail : Ω → ℝ := fun ω => limUnder atTop (fun n => g_n n ω)
         have hg_tail_sm : @StronglyMeasurable Ω ℝ _ (TailSigma.tailSigma X) g_tail :=
-          @StronglyMeasurable.limUnder ℕ Ω ℝ (TailSigma.tailSigma X) _ _ _ atTop _
-            (fun n => g_n n) _ hg_n_sm
+          @StronglyMeasurable.limUnder ℕ Ω ℝ (TailSigma.tailSigma X) _ _ atTop _
+            (fun n => g_n n) _ _ hg_n_sm
         -- g_tail equals tsum ae (since g_n → tsum ae, and limUnder captures this limit)
         have hg_tail_eq_tsum : g_tail =ᶠ[ae μ]
             (fun ω => ∑' k, ∫ x, (f k).indicator (fun _ => (1:ℝ)) x
@@ -885,8 +885,8 @@ lemma integral_bounded_measurable_tailAEStronglyMeasurable
   -- that the pointwise limit of tail-SM functions is tail-SM
   let g_tail : Ω → ℝ := fun ω => limUnder atTop (fun n => g_n n ω)
   have hg_tail_sm : @StronglyMeasurable Ω ℝ _ (TailSigma.tailSigma X) g_tail :=
-    @StronglyMeasurable.limUnder ℕ Ω ℝ (TailSigma.tailSigma X) _ _ _ atTop _
-      (fun n => g_n n) _ hg_n_sm
+    @StronglyMeasurable.limUnder ℕ Ω ℝ (TailSigma.tailSigma X) _ _ atTop _
+      (fun n => g_n n) _ _ hg_n_sm
   -- g_tail equals ∫ f dν(·) ae (since g_n → ∫ f dν(·) ae, and limUnder captures this limit)
   have hg_tail_eq : g_tail =ᶠ[ae μ]
       (fun ω => ∫ x, f x ∂(directing_measure X hX_contract hX_meas hX_L2 ω)) := by

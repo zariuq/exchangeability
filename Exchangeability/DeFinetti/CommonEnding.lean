@@ -196,7 +196,7 @@ lemma prod_le_one_of_le_one {ι : Type*} [Fintype ι] {f : ι → ENNReal}
     (hf : ∀ i, f i ≤ 1) : ∏ i, f i ≤ 1 := by
   apply Finset.prod_le_one
   · intro i _
-    exact zero_le _
+    exact zero_le
   · intro i _
     exact hf i
 

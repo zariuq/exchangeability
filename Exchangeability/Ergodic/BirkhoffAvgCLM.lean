@@ -152,7 +152,7 @@ lemma EventuallyEq.sum' {ι : Type*} [Fintype ι] {fs gs : ι → Ω → ℝ}
 
   rw [h_compl]
   -- Prove μ {x | ∑ i, fs i x ≠ ∑ i, gs i x} = 0
-  apply le_antisymm _ (zero_le _)
+  apply le_antisymm _ zero_le
   calc μ {ω | ∑ i, fs i ω ≠ ∑ i, gs i ω}
       ≤ μ (⋃ i, {ω | fs i ω ≠ gs i ω}) := measure_mono h_subset
     _ ≤ ∑ i, μ {ω | fs i ω ≠ gs i ω} := measure_iUnion_fintype_le μ _

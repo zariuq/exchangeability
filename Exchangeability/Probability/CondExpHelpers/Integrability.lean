@@ -135,7 +135,7 @@ lemma tendsto_set_integral_of_L1 {α : Type*} [MeasurableSpace α] {μ : Measure
     (hL1 : Filter.Tendsto (fun n => ∫⁻ ω, ‖(fn n) ω - f ω‖₊ ∂μ) Filter.atTop (nhds 0)) :
   Filter.Tendsto (fun n => ∫ ω in s, (fn n) ω ∂μ) Filter.atTop (nhds (∫ ω in s, f ω ∂μ)) := by
   -- Direct application of mathlib's tendsto_setIntegral_of_L1
-  apply MeasureTheory.tendsto_setIntegral_of_L1 f hf_int _ hL1 s
+  apply MeasureTheory.tendsto_setIntegral_of_L1 f hf_int.aestronglyMeasurable _ hL1 s
   -- Show that fn is eventually integrable
   filter_upwards with n
   exact hfn_int n
@@ -157,9 +157,9 @@ lemma tendsto_set_integral_mul_of_L1 {α : Type*} [MeasurableSpace α] {μ : Mea
           (nhds (∫ ω in s, f ω * H ω ∂μ)) := by
   -- Strategy: Show fn * H → f * H in L¹, then apply tendsto_setIntegral_of_L1
   apply MeasureTheory.tendsto_setIntegral_of_L1 (fun ω => f ω * H ω) _ _ _ s
-  · -- Goal (a): Show f * H is integrable
+  · -- Goal (a): Show f * H is a.e. strongly measurable
     -- Apply bdd_mul: bounded function H times integrable function f
-    have := hf_int.bdd_mul hH_int.aestronglyMeasurable hH_bdd
+    have := (hf_int.bdd_mul hH_int.aestronglyMeasurable hH_bdd).aestronglyMeasurable
     simpa only [mul_comm] using this
   · -- Goal (b): Show fn * H is eventually integrable
     filter_upwards with n
@@ -200,7 +200,7 @@ lemma tendsto_set_integral_mul_of_L1 {α : Type*} [MeasurableSpace α] {μ : Mea
       simp [mul_zero]
     -- Apply sandwichtendsto_of_tendsto_of_tendsto_of_le_of_le
     exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h_limit
-      (fun n => zero_le _) h_bound
+      (fun _ => zero_le) h_bound
 
 end MeasureTheory
 

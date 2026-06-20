@@ -2137,7 +2137,7 @@ private lemma blockAvg_shift_tendsto
 
   -- Step 5: Use squeeze theorem
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hUpper_tendsto
-  · exact Eventually.of_forall (fun _ => zero_le _)
+  · exact Eventually.of_forall (fun _ => zero_le)
   · rw [Filter.eventually_atTop]
     use 1
     intro m hm_pos
@@ -2290,13 +2290,13 @@ private lemma tendsto_setIntegral_of_L2_tendsto
   -- Step 1: L² → L¹ convergence on probability spaces (‖g‖₁ ≤ ‖g‖₂)
   have h1 : Tendsto (fun n => eLpNorm (fn n - f) 1 μ) atTop (𝓝 0) := by
     apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hL2
-    · intro n; exact zero_le _
+    · intro n; exact zero_le
     · intro n
       exact eLpNorm_le_eLpNorm_of_exponent_le one_le_two ((hfn n).sub hf).aestronglyMeasurable
   -- Step 2: Show each fn is integrable
   have hfn_int : ∀ n, Integrable (fn n) μ := fun n => (hfn n).integrable one_le_two
   -- Step 3: Apply tendsto_setIntegral_of_L1'
-  exact tendsto_setIntegral_of_L1' f (hf.integrable one_le_two)
+  exact tendsto_setIntegral_of_L1' f (hf.integrable one_le_two).aestronglyMeasurable
     (Filter.univ_mem' hfn_int) h1 A
 
 set_option maxHeartbeats 2000000
