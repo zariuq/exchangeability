@@ -1116,13 +1116,9 @@ private lemma cesaro_cauchy_rho_lt
     -- Should simplify to: n' * ∑_{i<n} Z_i - n * ∑_{j<n'} Z_j
     -- Expand RHS: n * n' * (∑ (if i<n then n⁻¹ else 0) * Z_i - ∑ (if j<n' then n'⁻¹ else 0) * Z_j)
     -- Using n * n' * n⁻¹ = n' and indicator sums
-    calc (↑n * m_mean + ∑ x ∈ Finset.range n, Z x ω) * ↑n' +
-          ↑n * (-(m_mean * ↑n') - ∑ x ∈ Finset.range n', Z x ω)
-        = ↑n * m_mean * ↑n' + (∑ x ∈ Finset.range n, Z x ω) * ↑n' +
-          ↑n * (-(m_mean * ↑n')) + ↑n * (- ∑ x ∈ Finset.range n', Z x ω) := by ring
-      _ = ↑n * m_mean * ↑n' + ↑n' * ∑ x ∈ Finset.range n, Z x ω +
-          (-(↑n * m_mean * ↑n')) + (-(↑n * ∑ x ∈ Finset.range n', Z x ω)) := by ring
-      _ = ↑n' * ∑ x ∈ Finset.range n, Z x ω - ↑n * ∑ x ∈ Finset.range n', Z x ω := by ring
+    calc ↑n' * (↑n * m_mean + ∑ x ∈ Finset.range n, Z x ω - ↑n * m_mean) -
+          ↑n * ∑ x ∈ Finset.range n', Z x ω
+        = ↑n' * ∑ x ∈ Finset.range n, Z x ω - ↑n * ∑ x ∈ Finset.range n', Z x ω := by ring
       _ = ↑n * ↑n' * (∑ x : Fin m, (if ↑x < n then (↑n)⁻¹ else 0) * Z (↑x) ω -
                       ∑ x : Fin m, (if ↑x < n' then (↑n')⁻¹ else 0) * Z (↑x) ω) := by
         -- RHS: distribute n * n' and simplify conditionals
@@ -1995,7 +1991,6 @@ lemma blockAvg_measurable_tailFamily
   -- tailFamily X m = iSup (fun j => comap (X (m + j)))
   -- X (m + k) ω = (fun j => X (m + j) ω) k, so it's the k-th coordinate
   -- of the shifted sequence, which is measurable by comap construction
-  simp only [TailSigma.tailFamily]
   apply Measurable.of_comap_le
   exact le_iSup (fun j => MeasurableSpace.comap (fun ω => X (m + j) ω) inferInstance) k
 
