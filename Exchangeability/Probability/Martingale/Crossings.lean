@@ -632,7 +632,7 @@ lemma condExp_exists_ae_limit_antitone
     filter_upwards [hbdd_liminf, hupcross] with ω hω₁ hω₂
     -- Convert enorm bound to nnnorm bound (they're equal via coercion)
     have hω₁' : (liminf (fun n => ENNReal.ofNNReal (nnnorm (μ[f | 𝔽 n] ω))) atTop) < ⊤ := by
-      convert hω₁ using 2  -- ENorm.enorm x = ↑(nnnorm x)
+      simpa only [enorm_eq_nnnorm] using hω₁  -- ‖x‖ₑ = ↑‖x‖₊
     exact tendsto_of_uncrossing_lt_top hω₁' hω₂
 
   -- Step 4: Define the limit function using classical choice

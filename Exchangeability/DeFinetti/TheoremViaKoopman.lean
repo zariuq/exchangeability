@@ -92,7 +92,7 @@ lemma exchangeable_path_of_exchangeable
   -- pathLaw μ X = Measure.map (fun ω i => X i ω) μ
   -- μ_path μ X = Measure.map (pathify X) μ where pathify X ω n = X n ω
   -- These are definitionally equal
-  convert hPathInv π using 2
+  exact hPathInv π
 
 /-- Transfer ConditionallyIID from path space to original space.
 

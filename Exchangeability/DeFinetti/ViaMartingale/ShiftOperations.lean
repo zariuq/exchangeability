@@ -118,7 +118,7 @@ lemma measurable_shiftRV (hX : ∀ n, Measurable (X n)) {m : ℕ} :
     Measurable (shiftRV X m) := by
   classical
   simpa [shiftRV] using
-    measurable_pi_iff.mpr (fun n => by simpa using hX (m + n))
+    measurable_pi_iff.mpr (fun n => by simpa [shiftRV] using hX (m + n))
 
 /-! ### Shift Contractability -/
 

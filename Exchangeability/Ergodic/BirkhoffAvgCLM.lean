@@ -37,7 +37,7 @@ By working entirely at the CLM level and only coercing at the end, we avoid this
 
 open scoped BigOperators
 noncomputable section
-classical
+open Classical
 
 namespace Exchangeability.Ergodic
 

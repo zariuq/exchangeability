@@ -222,7 +222,7 @@ lemma cylinder_subset_prefixCylinders {s : Finset ℕ} {S : Set (∀ _ : s, α)}
   let N := s.sup id + 1
   have h_mem : ∀ i ∈ s, i < N := by
     intro i hi
-    have hle : i ≤ s.sup id := by convert Finset.le_sup (f := id) hi
+    have hle : i ≤ s.sup id := Finset.le_sup (f := id) hi
     omega
   -- Transport `S` along the inclusion into the initial segment.
   let ι : s → Fin N := fun x => ⟨x.1, h_mem x.1 x.2⟩
@@ -537,11 +537,16 @@ lemma approxPerm_apply_cast {i : Fin n} :
   classical
   have hmem : ((Fin.castLE (le_permBound (π:=π) (n:=n)) i) : ℕ) < n :=
     i.2
-  have := Equiv.extendSubtype_apply_of_mem
+  have hap := Equiv.extendSubtype_apply_of_mem
       (e:=approxEquiv (π:=π) (n:=n))
       (x:=Fin.castLE (le_permBound (π:=π) (n:=n)) i)
       hmem
-  simpa using this
+  show (approxEquiv (π:=π) (n:=n)).extendSubtype
+      (Fin.castLE (le_permBound (π:=π) (n:=n)) i) = _
+  rw [hap]
+  -- `↑(approxEquiv ⟨castLE i, hmem⟩) = ⟨π i, _⟩` after reducing the inner index `⟨i.1, _⟩ = i`.
+  apply Fin.ext
+  rfl
 
 @[simp]
 lemma approxPerm_apply_cast_coe {i : Fin n} :

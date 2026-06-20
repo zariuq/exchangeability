@@ -340,7 +340,7 @@ lemma kallenberg_L2_bound
     have hk_in_s : (enum k).val ∈ s := (enum k).property
     have hZ_k_L2_orig := hZ_L2 (enum k).val hk_in_s
     -- ξ k ω - m = Z (enum k).val ω - m, so same MemLp
-    convert hZ_k_L2_orig.sub (memLp_const m) using 1
+    exact hZ_k_L2_orig.sub (memLp_const m)
 
   -- Prove all variances equal σ²
   have hvar : ∀ k : Fin n, ∫ ω, (ξ k ω - m)^2 ∂μ = σSq := by

@@ -350,10 +350,10 @@ lemma eapprox_real_approx {α : Type*} [MeasurableSpace α] (f : α → ℝ) (hf
       have := h_cont.comp h_tend_enn
       rwa [ENNReal.toReal_ofReal (le_max_right _ _)] at this
 
-    have := h_sp_tendsto.sub h_sm_tendsto
-    simp only [sf, fp, fm, SimpleFunc.coe_sub] at this ⊢
-    convert this using 2
-    exact (max_zero_sub_eq_self (f x)).symm
+    have hsub := h_sp_tendsto.sub h_sm_tendsto
+    rw [show f x = max (f x) 0 - max (-f x) 0 from (max_zero_sub_eq_self (f x)).symm]
+    refine hsub.congr (fun n => ?_)
+    simp only [sf, SimpleFunc.coe_sub, Pi.sub_apply]
 
 /-!
 ## L¹ convergence helper lemmas
@@ -459,7 +459,7 @@ lemma tendsto_L1_of_pointwise_dominated
       (fun n => by filter_upwards [h_bound n] with ω hω; simp [Real.norm_eq_abs, abs_abs, hω])
       h_tendsto_diff
   simp only [integral_zero] at h_conv
-  convert h_conv using 2
+  simpa only [Real.norm_eq_abs] using h_conv
 
 /-- **Integrability of conditional expectation product with bounded factor.**
 
@@ -473,9 +473,12 @@ lemma integrable_condExp_mul_of_bounded
     (_hg_int : Integrable g μ) :
     Integrable (μ[f | m] * μ[g | m]) μ := by
   have hf_ce_bdd : ∀ᵐ ω ∂μ, |μ[f | m] ω| ≤ M := by
-    have h_bdd : ∀ᵐ ω ∂μ, |f ω| ≤ (⟨M, hM_nn⟩ : NNReal) := by
-      filter_upwards [hf_bdd] with ω hω; simpa using hω
-    simpa [Real.norm_eq_abs] using ae_bdd_condExp_of_ae_bdd (m := m) (R := ⟨M, hM_nn⟩) h_bdd
+    have h_bdd : ∀ᵐ ω ∂μ, |f ω| ≤ (M.toNNReal : ℝ) := by
+      filter_upwards [hf_bdd] with ω hω
+      rwa [Real.coe_toNNReal M hM_nn]
+    have hbd := ae_bdd_condExp_of_ae_bdd (m := m) (R := M.toNNReal) h_bdd
+    filter_upwards [hbd] with ω hω
+    rwa [Real.coe_toNNReal M hM_nn] at hω
   -- bdd_mul (c := M) hg hf_asm hf_bdd gives Integrable (hf * hg)
   -- We want μ[f|m] * μ[g|m] where f is bounded
   -- So use: (integrable μ[g|m]).bdd_mul (μ[f|m].aestronglyMeasurable) (bound on μ[f|m])

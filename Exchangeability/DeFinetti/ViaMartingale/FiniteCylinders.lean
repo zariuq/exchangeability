@@ -347,9 +347,10 @@ lemma join_eq_comap_pair_finFuture
   let f : Ω → (Fin r → α) := fun ω i => X i.1 ω
   let g : Ω → (Fin k → α) := fun ω j => X (m + 1 + j.1) ω
   -- LHS is the join of comaps; RHS is comap of the product.
-  have : firstRSigma X r = MeasurableSpace.comap f inferInstance := rfl
-  have : finFutureSigma X m k = MeasurableSpace.comap g inferInstance := rfl
+  have hf : firstRSigma X r = MeasurableSpace.comap f inferInstance := rfl
+  have hg : finFutureSigma X m k = MeasurableSpace.comap g inferInstance := rfl
   -- `comap_prodMk` is exactly the identity we need.
-  simpa [firstRSigma, finFutureSigma] using (MeasurableSpace.comap_prodMk f g).symm
+  rw [hf, hg]
+  exact (MeasurableSpace.comap_prodMk f g).symm
 
 end Exchangeability.DeFinetti.ViaMartingale

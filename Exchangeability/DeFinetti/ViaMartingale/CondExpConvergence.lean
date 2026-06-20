@@ -152,7 +152,7 @@ lemma extreme_members_equal_on_tail
   -- CE(X_m | rev (m+1)) = CE(X_0 | rev (m+1)) via contractability
   have h_eq : μ[Set.indicator (X m ⁻¹' B) (fun _ => (1 : ℝ)) | revFiltration X (m + 1)]
       =ᵐ[μ] μ[Set.indicator (X 0 ⁻¹' B) (fun _ => (1 : ℝ)) | revFiltration X (m + 1)] := by
-    convert condexp_convergence hX hX_meas 0 m (Nat.zero_le m) B hB using 2
+    convert condexp_convergence hX hX_meas 0 m (Nat.zero_le m) B hB using 2 <;> rfl
   exact h_m.symm.trans (h_eq.trans h_0)
 
 

@@ -356,6 +356,7 @@ lemma optionB_Step4b_AB_close
           h_sum.smul (1 / (n + 1 : ℝ))
         -- rewrite to your definition of `A n`
         rw [hA_def]
+        simp only [smul_eq_mul] at h_smul
         convert h_smul using 2
 
       have h_int_Bn : Integrable (B n) μ := by

@@ -171,11 +171,13 @@ lemma condIndep_simpleFunc_left
 
       -- φY is essentially bounded
       have hφY_bdd : ∀ᵐ ω ∂μ, |μ[(φ ∘ Y) | mW] ω| ≤ Mφ := by
-        have h_bdd : ∀ᵐ ω ∂μ, |(φ ∘ Y) ω| ≤ (⟨Mφ, hMφ_nn⟩ : NNReal) := by
+        have h_bdd : ∀ᵐ ω ∂μ, |(φ ∘ Y) ω| ≤ (Mφ.toNNReal : ℝ) := by
           filter_upwards [] with ω
+          rw [Real.coe_toNNReal Mφ hMφ_nn]
           simpa using hφ_bdd (Y ω)
-        simpa [Real.norm_eq_abs] using
-          ae_bdd_condExp_of_ae_bdd (m := mW) (R := ⟨Mφ, hMφ_nn⟩) h_bdd
+        have hbd := ae_bdd_condExp_of_ae_bdd (m := mW) (R := Mφ.toNNReal) h_bdd
+        filter_upwards [hbd] with ω hω
+        rwa [Real.coe_toNNReal Mφ hMφ_nn] at hω
 
       -- Step 5a: L¹ convergence of sψ n ∘ Z → ψ ∘ Z using helper lemma
       have hMψ_nn : 0 ≤ Mψ := by
@@ -378,11 +380,13 @@ lemma condIndep_simpleFunc_left
       have hMψ_nn : 0 ≤ Mψ := by
         rcases hψ_bdd.exists with ⟨ω, hω⟩
         exact (abs_nonneg _).trans hω
-      have h_bdd : ∀ᵐ ω ∂μ, |(ψ ∘ Z) ω| ≤ (⟨Mψ, hMψ_nn⟩ : NNReal) := by
+      have h_bdd : ∀ᵐ ω ∂μ, |(ψ ∘ Z) ω| ≤ (Mψ.toNNReal : ℝ) := by
         filter_upwards [hψ_bdd] with ω hω
+        rw [Real.coe_toNNReal Mψ hMψ_nn]
         simpa using hω
-      simpa [Real.norm_eq_abs] using
-        ae_bdd_condExp_of_ae_bdd (m := mW) (R := ⟨Mψ, hMψ_nn⟩) h_bdd
+      have hbd := ae_bdd_condExp_of_ae_bdd (m := mW) (R := Mψ.toNNReal) h_bdd
+      filter_upwards [hbd] with ω hω
+      rwa [Real.coe_toNNReal Mψ hMψ_nn] at hω
     have hprod : Integrable (μ[(φ ∘ Y) | mW] * μ[(ψ ∘ Z) | mW]) μ := by
       -- bdd_mul (c := Mψ) hg hf_asm hf_bound gives Integrable (hf * hg)
       -- We want Integrable (μ[φY|mW] * μ[ψZ|mW])
@@ -557,11 +561,13 @@ lemma condIndep_bddMeas_extend_left
         rcases hψ_bdd.exists with ⟨ω, hω⟩
         exact (abs_nonneg _).trans hω
       have hψZ_bdd : ∀ᵐ ω ∂μ, |μ[(ψ ∘ Z) | mW] ω| ≤ Mψ := by
-        have h_bdd : ∀ᵐ ω ∂μ, |(ψ ∘ Z) ω| ≤ (⟨Mψ, hMψ_nn⟩ : NNReal) := by
+        have h_bdd : ∀ᵐ ω ∂μ, |(ψ ∘ Z) ω| ≤ (Mψ.toNNReal : ℝ) := by
           filter_upwards [hψ_bdd] with ω hω
+          rw [Real.coe_toNNReal Mψ hMψ_nn]
           simpa using hω
-        simpa [Real.norm_eq_abs] using
-          ae_bdd_condExp_of_ae_bdd (m := mW) (R := ⟨Mψ, hMψ_nn⟩) h_bdd
+        have hbd := ae_bdd_condExp_of_ae_bdd (m := mW) (R := Mψ.toNNReal) h_bdd
+        filter_upwards [hbd] with ω hω
+        rwa [Real.coe_toNNReal Mψ hMψ_nn] at hω
 
       -- Step 2a: Show L¹ convergence of original functions: sφ n ∘ Y → φ ∘ Y
       have hsφ_int : ∀ n, Integrable ((sφ n) ∘ Y) μ := by
@@ -783,11 +789,13 @@ lemma condIndep_bddMeas_extend_left
         rcases hφ_bdd.exists with ⟨ω, hω⟩
         exact (abs_nonneg _).trans hω
       have hφY_ce_bdd : ∀ᵐ ω ∂μ, |μ[(φ ∘ Y) | mW] ω| ≤ Mφ := by
-        have h_bdd : ∀ᵐ ω ∂μ, |(φ ∘ Y) ω| ≤ (⟨Mφ, hMφ_nn⟩ : NNReal) := by
+        have h_bdd : ∀ᵐ ω ∂μ, |(φ ∘ Y) ω| ≤ (Mφ.toNNReal : ℝ) := by
           filter_upwards [hφ_bdd] with ω hω
+          rw [Real.coe_toNNReal Mφ hMφ_nn]
           simpa using hω
-        simpa [Real.norm_eq_abs] using
-          ae_bdd_condExp_of_ae_bdd (m := mW) (R := ⟨Mφ, hMφ_nn⟩) h_bdd
+        have hbd := ae_bdd_condExp_of_ae_bdd (m := mW) (R := Mφ.toNNReal) h_bdd
+        filter_upwards [hbd] with ω hω
+        rwa [Real.coe_toNNReal Mφ hMφ_nn] at hω
       -- Apply Integrable.bdd_mul: g integrable, f ae strongly measurable and bounded
       -- Use h1.aestronglyMeasurable since h1 : Integrable (μ[(φ ∘ Y) | mW]) μ
       refine h2.bdd_mul (c := Mφ) h1.aestronglyMeasurable ?_

@@ -362,9 +362,14 @@ lemma exists_perm_extending_strictMono {m n : ℕ} (k : Fin m → ℕ)
   let σ : Equiv.Perm (Fin n) := Equiv.extendSubtype e
   have hσ_apply : ∀ i : Fin m, σ (ι i) = kFin i := by
     intro i
-    have h_apply := Equiv.extendSubtype_apply_of_mem (e:=e) (x:=ι i) (hι_mem i)
-    dsimp [σ, e, Equiv.trans, e_dom, e_cod, ι, Fin.castLEEmb, kFin] at h_apply
-    simpa using h_apply
+    have h_apply := Equiv.extendSubtype_apply_of_mem (e := e) (x := ι i) (hι_mem i)
+    -- `e_dom ⟨ι i, _⟩ = i`, hence `e ⟨ι i, _⟩ = e_cod i = ⟨kFin i, _⟩`.
+    have h_e : (e ⟨ι i, hι_mem i⟩ : {x : Fin n // q x}) = ⟨kFin i, hk_mem i⟩ := by
+      have h_dom : e_dom ⟨ι i, hι_mem i⟩ = i := Fin.ext rfl
+      show e_cod (e_dom ⟨ι i, hι_mem i⟩) = _
+      rw [h_dom]
+      rfl
+    rw [h_apply, h_e]
   refine ⟨σ, fun i => ?_⟩
   have hσ_val : (σ (ι i)).val = k i := by simpa [kFin] using congrArg Fin.val (hσ_apply i)
   simpa [ι] using hσ_val

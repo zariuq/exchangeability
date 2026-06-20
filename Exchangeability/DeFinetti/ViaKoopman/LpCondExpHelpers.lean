@@ -45,8 +45,8 @@ lemma condExp_const_mul
     (c : ℝ) (f : Ω → ℝ) :
     μ[(fun ω => c * f ω) | m] =ᵐ[μ] (fun ω => c * μ[f | m] ω) := by
   -- `condExp_smul` in mathlib takes m as explicit positional parameter
-  simpa [Pi.mul_apply, smul_eq_mul] using
-    (MeasureTheory.condExp_smul c f m)
+  have h := MeasureTheory.condExp_smul (μ := μ) (m := m) c f
+  exact h
 
 /-- Finite sum linearity of conditional expectation.
 **Mathematical content**: CE[Σᵢfᵢ| mSI] = ΣᵢCE[fᵢ| mSI]
@@ -120,5 +120,5 @@ lemma ennreal_tendsto_toReal_zero {ι : Type*}
     (f : ι → ENNReal) {a : Filter ι}
     (hf : Tendsto f a (𝓝 (0 : ENNReal))) :
     Tendsto (fun x => (f x).toReal) a (𝓝 (0 : ℝ)) := by
-  simpa [ENNReal.toReal_zero] using
+  simpa [ENNReal.toReal_zero, Function.comp_def] using
     (ENNReal.continuousAt_toReal ENNReal.zero_ne_top).tendsto.comp hf

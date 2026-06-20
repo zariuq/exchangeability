@@ -121,7 +121,8 @@ lemma preimage_rect_future
     refine ⟨?_, ?_⟩
     · simpa [ψ]
     · intro i
-      simpa only using (hC : (shiftRV X (m + 1) ω) ∈ cylinder (α:=α) r C) i
+      have hi := (hC : (shiftRV X (m + 1) ω) ∈ cylinder (α:=α) r C) i
+      simpa only [ψ, shiftRV] using hi
   · rcases h with ⟨hB, hC⟩
     refine ⟨?_, ?_⟩
     · simpa [ψ]

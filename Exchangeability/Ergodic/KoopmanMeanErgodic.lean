@@ -266,9 +266,9 @@ theorem birkhoffAverage_tendsto_metProjection
   haveI : S.HasOrthogonalProjection := Submodule.HasOrthogonalProjection.ofCompleteSpace S
   have h_tendsto :=
     ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection K hnorm f
-  have hS_eq : S = fixedSpace (koopman T hT) := rfl
-  simp only [metProjection]
-  convert h_tendsto using 2
+  -- `metProjection T hT f = ↑(S.orthogonalProjectionOnto f)` definitionally, and
+  -- `S = fixedSpace (koopman T hT) = K.eqLocus 1`.
+  exact h_tendsto
 
 /--
 The range of the projection from the Mean Ergodic Theorem equals the fixed-point subspace.

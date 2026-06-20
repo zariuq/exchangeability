@@ -123,8 +123,8 @@ lemma condProb_integral_eq {m₀ : MeasurableSpace Ω} {μ : Measure Ω}
   have h_const : ∫ ω in B ∩ A, (1 : ℝ) ∂μ = (μ (B ∩ A)).toReal := by
     simp [Measure.real_def, Set.inter_comm]
   -- Put everything together and clean up intersections.
-  simpa [condProb, h_indicator, h_const, Set.inter_comm, Set.inter_left_comm, Set.inter_assoc]
-    using h_condexp
+  simpa [condProb, h_indicator, h_const, Measure.real_def, Set.inter_comm, Set.inter_left_comm,
+    Set.inter_assoc] using h_condexp
 
 omit [MeasurableSpace Ω] in
 @[simp]

@@ -361,14 +361,11 @@ lemma L1_cesaro_convergence
             _ = ∫ ω, |g (ω 0) - g_M M₀ (ω 0)| ∂μ := by field_simp
             _ < ε / 3 := h_bound
         · -- Term 2: bounded case
-          have := hN_bdd n hn
-          rw [Real.dist_eq, sub_zero] at this
-          rw [abs_of_nonneg (integral_nonneg (fun ω => abs_nonneg _))] at this
-          convert this using 2
-          ext ω
-          simp only [A_M₀]
-          congr 1
-          norm_cast
+          have hb := hN_bdd n hn
+          rw [Real.dist_eq, sub_zero] at hb
+          rw [abs_of_nonneg (integral_nonneg (fun ω => abs_nonneg _))] at hb
+          simp only [Nat.cast_add, Nat.cast_one] at hb
+          exact hb
         · -- Term 3: CE truncation error
           have h_M₀_ge : M₀ ≥ M' := le_max_right M M'
           have := hM'_ce M₀ h_M₀_ge

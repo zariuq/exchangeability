@@ -316,9 +316,8 @@ lemma condExp_project_of_condIndep (μ : Measure Ω) [IsProbabilityMeasure μ]
                       have h_set_eq :
                           ∫ x in W ⁻¹' C, μ[(μ[f | mW]) * gB | mW] x ∂μ
                         = ∫ x in W ⁻¹' C, ((μ[f | mW]) * gB) x ∂μ := by
-                        simpa using
-                          (setIntegral_condExp (μ := μ) (m := mW)
-                            (hm := hmW_le) (hs := hCpre) (hf := hint_prod))
+                        exact setIntegral_condExp (μ := μ) (m := mW)
+                            (hm := hmW_le) (hs := hCpre) (hf := hint_prod)
                       exact h_set_eq.symm
                   _ = ∫ x in W ⁻¹' C, ((μ[f | mW]) * μ[gB | mW]) x ∂μ := by
                       exact setIntegral_congr_ae (hmW_le _ hC_meas) (by filter_upwards [h_pull] with x hx _; exact hx)

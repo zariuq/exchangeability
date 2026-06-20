@@ -199,7 +199,7 @@ lemma test_fn_pair_law
   have h := integral_eq_of_map_eq hT hT' hg_test_int h_pair
 
   -- Simplify: g_test ∘ (Y,W) = f∘Y * g∘W
-  convert h using 1
+  convert h using 1 <;> rfl
 
 /-! **Kallenberg Lemma 1.3 (Contraction-Independence)**: If the triple distribution
 satisfies (Y, Z, W) =^d (Y, Z, W'), then Y and Z are conditionally independent given W.

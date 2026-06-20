@@ -320,8 +320,9 @@ private lemma measure_via_indicator_integral (μ : Measure Ω) (X : ℕ → Ω �
   classical
   set E := {ω | ∀ i : Fin m, X (k i) ω ∈ B i}
   have hEvtMeas : MeasurableSet E := by
-    have : E = ⋂ i : Fin m, {ω | X (k i) ω ∈ B i} := by ext ω; simp [E]
-    simpa [this] using MeasurableSet.iInter fun i => (hX_meas (k i)) (hB i)
+    have hE : E = ⋂ i : Fin m, X (k i) ⁻¹' B i := by ext ω; simp [E, Set.mem_preimage]
+    rw [hE]
+    exact MeasurableSet.iInter fun i => (hX_meas (k i)) (hB i)
   have hProdEqIndicator := @prod_indicators_eq_indicator_intersection Ω α m X k B
   have hlin := lintegral_indicator (μ := μ) (s := E) (f := fun _ => 1) hEvtMeas
   have hconst := lintegral_const (μ := μ.restrict E) (c := 1)

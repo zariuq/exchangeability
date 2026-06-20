@@ -808,7 +808,7 @@ lemma alphaIicCE_L1_tendsto_zero_atBot
     have h_tendsto_ennreal : Tendsto (fun (n : ℕ) => μ (X 0 ⁻¹' Set.Iic (-(n : ℝ)))) atTop (𝓝 0) := by
       have := tendsto_measure_iInter_atTop (μ := μ) h_meas h_antitone h_fin
       simp only [h_empty, measure_empty] at this
-      simpa [Function.comp] using this
+      simpa [Function.comp_def] using this
     -- Convert from ENNReal to Real using continuity of toReal at 0
     have h_ne_top : ∀ n, μ (X 0 ⁻¹' Set.Iic (-(n : ℝ))) ≠ ⊤ := fun n => measure_ne_top μ _
     have h_zero_ne_top : (0 : ENNReal) ≠ ⊤ := by norm_num
@@ -905,7 +905,7 @@ lemma alphaIicCE_L1_tendsto_one_atTop
     have h_tendsto_ennreal : Tendsto (fun (n : ℕ) => μ (X 0 ⁻¹' Set.Ioi (n : ℝ))) atTop (𝓝 0) := by
       have := tendsto_measure_iInter_atTop (μ := μ) h_meas h_antitone h_fin
       simp only [h_empty, measure_empty] at this
-      simpa [Function.comp] using this
+      simpa [Function.comp_def] using this
     -- Convert from ENNReal to Real using continuity of toReal at 0
     have h_ne_top : ∀ n, μ (X 0 ⁻¹' Set.Ioi (n : ℝ)) ≠ ⊤ := fun n => measure_ne_top μ _
     have h_zero_ne_top : (0 : ENNReal) ≠ ⊤ := by norm_num

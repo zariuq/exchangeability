@@ -122,7 +122,7 @@ lemma koopman_eq_self_of_shiftInvariant
         (fun ω => f (shift ω)) := by
     change MeasureTheory.Lp.compMeasurePreserving (shift (α := α)) hσ f =ᵐ[μ]
         fun ω => f (shift ω)
-    simpa [koopman]
+    simpa [koopman, Function.comp_def]
       using
         (MeasureTheory.Lp.coeFn_compMeasurePreserving f hσ)
   have hshift := shiftInvariantSigma_aestronglyMeasurable_ae_shift_eq (μ := μ) hσ hf
@@ -161,7 +161,7 @@ lemma aestronglyMeasurable_shiftInvariant_of_koopman
   have hcomp : (koopman shift hσ f) =ᵐ[μ] fun ω => f (shift ω) := by
     change MeasureTheory.Lp.compMeasurePreserving (shift (α := α)) hσ f =ᵐ[μ]
         fun ω => f (shift ω)
-    simpa [koopman]
+    simpa [koopman, Function.comp_def]
       using
         (MeasureTheory.Lp.coeFn_compMeasurePreserving f hσ)
   have hshift : (fun ω => f (shift ω)) =ᵐ[μ] f := hcomp.symm.trans (by simp [hfix])
@@ -331,9 +331,8 @@ lemma metProjectionShift_isSymmetric
   classical
   have hclosed := fixedSubspace_closed (μ := μ) hσ
   have : CompleteSpace (fixedSubspace hσ) := hclosed.completeSpace_coe
-  simpa [metProjectionShift] using
-    (subtypeL_comp_orthogonalProjection_isSymmetric
-      (fixedSubspace hσ : Submodule ℝ (Lp ℝ 2 μ)))
+  exact subtypeL_comp_orthogonalProjection_isSymmetric
+      (fixedSubspace hσ : Submodule ℝ (Lp ℝ 2 μ))
 
 lemma metProjectionShift_tendsto
     {μ : Measure (Ω[α])} [IsProbabilityMeasure μ]
@@ -360,7 +359,7 @@ lemma metProjectionShift_tendsto
   have : (LinearMap.eqLocus K.toLinearMap 1).HasOrthogonalProjection := by
     rw [hS]; exact Submodule.HasOrthogonalProjection.ofCompleteSpace (fixedSubspace hσ)
   have hlimit := ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection K hnorm f
-  convert hlimit using 1
+  exact hlimit
 
 /-- The range of `metProjectionShift` equals the fixed subspace. -/
 lemma metProjectionShift_range_fixedSubspace

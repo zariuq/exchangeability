@@ -104,7 +104,7 @@ lemma contractable_map_single (hX_contract : Contractable μ X) (hX_meas : ∀ i
       (fun ω => eval (fun j : Fin 1 => X j.val ω)) = fun ω => X 0 ω := by
     funext ω
     simp [eval, fin1Zero]
-  simpa [Function.comp, h_comp_simp, h_comp_simp'] using h_comp
+  simpa [Function.comp_def, h_comp_simp, h_comp_simp'] using h_comp
 
 /-- **Strict monotonicity for two-point subsequence selection.**
 
@@ -174,7 +174,7 @@ lemma contractable_map_pair (hX_contract : Contractable μ X) (hX_meas : ∀ i, 
       (fun ω => eval (fun t : Fin 2 => X t.val ω)) = fun ω => (X 0 ω, X 1 ω) := by
     funext ω
     simp [eval, fin2Zero, fin2One]
-  simpa [Function.comp, h_comp_simp, h_comp_simp'] using h_comp
+  simpa [Function.comp_def, h_comp_simp, h_comp_simp'] using h_comp
 
 /-- **Contractability is preserved under measurable postcomposition.**
 
@@ -191,7 +191,7 @@ lemma contractable_comp (hX_contract : Contractable μ X) (hX_meas : ∀ i, Meas
   have hΦ_meas : Measurable Φ := by
     refine measurable_pi_lambda _ ?_
     intro i
-    simpa [Φ] using hf_meas.comp (measurable_pi_apply i)
+    simpa [Φ, Function.comp_def] using hf_meas.comp (measurable_pi_apply i)
   have h_meas_k : Measurable fun ω => fun i : Fin n => X (k i) ω := by
     fun_prop
   have h_meas_std : Measurable fun ω => fun i : Fin n => X i.val ω := by
@@ -210,7 +210,7 @@ lemma contractable_comp (hX_contract : Contractable μ X) (hX_meas : ∀ i, Meas
         fun ω => fun i : Fin n => f (X i.val ω) := by
     funext ω i
     simp [Φ]
-  simpa [Function.comp, Φ, h_left_eval, h_right_eval] using
+  simpa [Function.comp_def, Φ, h_left_eval, h_right_eval] using
     h_left.trans (h_apply.trans h_right)
 
 /-- **Young's inequality for products: |ab| ≤ (a² + b²)/2.**
@@ -423,7 +423,7 @@ lemma contractable_single_marginal_eq
     funext ω; simp [eval, κ]
   have h_comp_right : (fun ω => eval (fun j : Fin 1 => X j.val ω)) = fun ω => X 0 ω := by
     funext ω; simp [eval]
-  simpa [Function.comp, h_comp_left, h_comp_right] using h_comp
+  simpa [Function.comp_def, h_comp_left, h_comp_right] using h_comp
 
 -- Helper lemmas for Fin index gymnastics in two-window bounds.
 -- These lemmas isolate the technical reindexing and cardinality proofs needed for

@@ -615,7 +615,6 @@ lemma l2_bound_two_windows_uniform
       have h_indicator :=
         (Finset.sum_filter (s := S) (p := fun t => t ∈ window m k)
             (f := fun _ : ℕ => (1 / (k : ℝ)))).symm
-      simp only at h_indicator
       rw [h_filter] at h_indicator
       exact h_indicator
     have h_card : (window m k).card = k := window_card m k
@@ -728,7 +727,9 @@ lemma l2_bound_two_windows_uniform
       filter_upwards with ω
       simp [Real.norm_eq_abs]
       exact hM (X (idx i) ω)
-    simpa [ξ, Y, idx, hY_def] using this.sub (memLp_const mf)
+    have hsub := this.sub (memLp_const mf)
+    simp only [ξ, Y, idx, hY_def]
+    exact hsub
 
   have hξ_var : ∀ i : Fin nS, ∫ ω, (ξ i ω - mf)^2 ∂μ = (Real.sqrt σSqf) ^ 2 := by
     intro i
@@ -1265,7 +1266,9 @@ lemma l2_bound_long_vs_tail
       filter_upwards with ω
       simp [Real.norm_eq_abs]
       exact hM (X (n + i.val + 1) ω)
-    simpa [ξ] using this.sub (memLp_const mf)
+    have hsub := this.sub (memLp_const mf)
+    simp only [ξ]
+    exact hsub
 
   have hξ_var : ∀ i, ∫ ω, (ξ i ω - mf)^2 ∂μ = (Real.sqrt σSqf) ^ 2 := by
     intro i

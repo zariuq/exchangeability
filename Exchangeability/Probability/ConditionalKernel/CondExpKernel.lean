@@ -51,4 +51,7 @@ lemma condExp_indicator_eq_integral_condDistrib
       · exact integrable_const _
       · exact hξ hB
   -- Rewrite LHS: (fun a => B.indicator 1 (ξ a)) = (ξ ⁻¹' B).indicator 1
-  convert this using 2
+  have hcomp : (ξ ⁻¹' B).indicator (fun _ => (1 : ℝ))
+      = fun a => B.indicator (fun _ => (1 : ℝ)) (ξ a) := rfl
+  rw [hcomp]
+  exact this

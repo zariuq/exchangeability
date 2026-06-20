@@ -216,16 +216,18 @@ private lemma setIntegral_cylinder_eq
   have hS_σ : ∀ ω, ((fun i : Fin (M + 2) => X (σ ⟨i.val + 1, by omega⟩) ω) ∈ S) ↔ ω ∈ C' := by
     intro ω
     simp only [Set.mem_setOf_eq, C']
-    constructor
-    · intro h; convert h using 1
-    · intro h; convert h using 1
+    have hfun : (fun i : Fin (M + 2) => X (σ ⟨i.val + 1, by omega⟩) ω)
+        = fun i : Fin (M + 2) => X (N + i.val) ω := by
+      funext i; rw [hσ_tail i]
+    rw [hfun]
 
   have hS_τ : ∀ ω, ((fun i : Fin (M + 2) => X (τ ⟨i.val + 1, by omega⟩) ω) ∈ S) ↔ ω ∈ C' := by
     intro ω
     simp only [Set.mem_setOf_eq, C']
-    constructor
-    · intro h; convert h using 1
-    · intro h; convert h using 1
+    have hfun : (fun i : Fin (M + 2) => X (τ ⟨i.val + 1, by omega⟩) ω)
+        = fun i : Fin (M + 2) => X (N + i.val) ω := by
+      funext i; rw [hτ_tail i]
+    rw [hfun]
 
   have hg_σ : ∀ ω, g (fun i => X (σ i) ω) = f (X (k + 1) ω) * (C'.indicator 1 ω) := by
     intro ω

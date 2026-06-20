@@ -55,9 +55,9 @@ lemma abs_integral_mul_le_L2
       ≤ (∫ ω, (f ω) ^ 2 ∂μ) ^ (1/2 : ℝ) * (∫ ω, (g ω) ^ 2 ∂μ) ^ (1/2 : ℝ) := by
   -- Reduce to nonnegative case using |f·g| = |f|·|g| and |f|² = f²
   have hf_abs : MemLp (fun ω => |f ω|) (ENNReal.ofReal 2) μ := by
-    convert hf.abs; norm_num
+    rw [ENNReal.ofReal_ofNat]; exact hf.abs
   have hg_abs : MemLp (fun ω => |g ω|) (ENNReal.ofReal 2) μ := by
-    convert hg.abs; norm_num
+    rw [ENNReal.ofReal_ofNat]; exact hg.abs
   have h_conj : (2 : ℝ).HolderConjugate 2 := by
     constructor <;> norm_num
   calc |∫ ω, f ω * g ω ∂μ|
@@ -138,8 +138,7 @@ lemma L2_tendsto_implies_L1_tendsto_of_bounded
 
     -- We'll apply cs to |f n - g| and 1, but cs is for general f, g
     -- So we need a version where we plug in |f n - g| for the first argument
-    have h_abs_memLp : MemLp (fun ω => |f n ω - g ω|) 2 μ := by
-      convert h_memLp.abs using 1
+    have h_abs_memLp : MemLp (fun ω => |f n ω - g ω|) 2 μ := h_memLp.abs
 
     have cs_abs := abs_integral_mul_le_L2 h_abs_memLp one_memLp
 

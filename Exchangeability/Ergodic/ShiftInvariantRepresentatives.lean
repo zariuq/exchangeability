@@ -109,7 +109,7 @@ lemma gRep_measurable {g0 : Ω[α] → ℝ} (hg0 : Measurable g0) :
     simpa [gLimsupE] using (Measurable.limsup hstep)
   have : Measurable fun ω => (gLimsupE g0 ω).toReal := by
     fun_prop
-  simpa [gRep, gLimsupE] using this
+  exact this
 
 omit [MeasurableSpace α] in
 lemma gRep_shiftInvariant {g0 : Ω[α] → ℝ} :
@@ -155,7 +155,7 @@ lemma ae_shift_invariance_on_rep
     (fun ω => g (shift ω)) =ᵐ[μ] g := by
   classical
   have h1 : (fun ω => g (shift ω)) =ᵐ[μ] fun ω => f (shift ω) := by
-    simpa [Function.comp] using
+    simpa [Function.comp_def] using
       (hσ.quasiMeasurePreserving.ae_eq_comp (μ := μ) (ν := μ)
         (f := shift) (g := g) (g' := f) hfg)
   have h2 : (fun ω => f (shift ω)) =ᵐ[μ] f := by
@@ -219,7 +219,7 @@ private lemma exists_shiftInvariantFullMeasureSet
   -- `S0` has full measure thanks to the `ae` equality.
   have hS0_full : μ S0ᶜ = 0 := by
     have hS0_ae : ∀ᵐ ω ∂μ, g (shift ω) = g ω := hinv
-    simpa [S0, ae_iff] using hS0_ae
+    simpa [S0, ae_iff, Set.compl_setOf] using hS0_ae
 
   -- All forward preimages of `S0` also have full measure via measure-preservation.
   have hpre_full : ∀ n : ℕ, μ (((shift^[n]) ⁻¹' S0)ᶜ) = 0 := by
@@ -241,10 +241,10 @@ private lemma exists_shiftInvariantFullMeasureSet
     have h_forall : ∀ n : ℕ, ∀ᵐ ω ∂μ, ω ∈ (shift^[n]) ⁻¹' S0 := by
       intro n
       have : μ (((shift^[n]) ⁻¹' S0)ᶜ) = 0 := hpre_full n
-      simpa [ae_iff] using this
+      simpa [ae_iff, Set.compl_def] using this
     have hSinf_ae : ∀ᵐ ω ∂μ, ω ∈ Sinf := by
       simpa [Sinf, hSinf_def, Set.mem_iInter] using (ae_all_iff.mpr h_forall)
-    simpa [ae_iff] using hSinf_ae
+    simpa [ae_iff, Set.compl_def] using hSinf_ae
 
   -- Close the forward-invariant set under further pullbacks to target exact invariance.
   set Sstar : Set (Ω[α]) := ⋂ k : ℕ, (shift^[k]) ⁻¹' Sinf with hSstar_def
@@ -262,10 +262,10 @@ private lemma exists_shiftInvariantFullMeasureSet
         rw [hσk.measure_preimage hSinf_meas.compl.nullMeasurableSet]
       have : μ (((shift^[k]) ⁻¹' Sinf)ᶜ) = 0 := by
         simpa [Set.preimage_compl] using hpre.trans hSinf_full
-      simpa [ae_iff] using this
+      simpa [ae_iff, Set.compl_def] using this
     have hSstar_ae : ∀ᵐ ω ∂μ, ω ∈ Sstar := by
       simpa [Sstar, hSstar_def, Set.mem_iInter] using (ae_all_iff.mpr h_forall)
-    simpa [ae_iff] using hSstar_ae
+    simpa [ae_iff, Set.compl_def] using hSstar_ae
 
   -- Membership in `Sstar` ensures all forward iterates land back in `Sinf`.
   have hSstar_mem_Sinf : ∀ {ω}, ω ∈ Sstar → ω ∈ Sinf := by
@@ -347,7 +347,7 @@ lemma mkShiftInvariantRep
     have : ω ∈ shift ⁻¹' S := hS_subset hω
     simpa [Set.mem_preimage] using this
   have hS_ae : ∀ᵐ ω ∂μ, ω ∈ S := by
-    simpa [ae_iff] using hS_null
+    simpa [ae_iff, Set.compl_def] using hS_null
   have hconst_on_S : ∀ ω ∈ S, ∀ n : ℕ, g0 (shift^[n] ω) = g0 ω := by
     intro ω hω
     have hmem : ∀ n : ℕ, shift^[n] ω ∈ S := by
